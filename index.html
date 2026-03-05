@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>出目集計ツール</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="root" data-flag="1">
+    <main>
+      <aside>
+        <div>
+          <h1>出目集計ツール</h1>
+          <button class="fileButton">ログを選択</button>
+          <input type="file" accept="text/html" multiple>
+
+          <button class="fileButton add">追加</button>
+          <input type="file" accept="text/html" multiple>
+
+          <div style="display: flex;gap: 0.25rem;flex-direction: column;">
+            <h2>SYSTEM</h2>
+            <label><input type="radio" name="system" value="coc6th" checked>CoC6th</label>
+            <label><input type="radio" name="system" value="coc7th">CoC7th</label>
+            <label><input type="radio" name="system" value="emoklore">Emo-klore</label>
+
+            <h2>DISPLAY</h2>
+            
+            <div class="twoGrid">
+              キャラ選択
+              <label class="toggle-button">
+                <input type="checkbox" id="showSelectTag"/>
+                <span class="slider"></span>
+                <span class="checked">表示</span>
+                <span class="not-checked">非表示</span>
+              </label>
+              
+              集計結果
+              <label class="toggle-button">
+                <input type="checkbox" id="showTotal" checked/>
+                <span class="slider"></span>
+                <span class="checked">表示</span>
+                <span class="not-checked">非表示</span>
+              </label>
+              
+              <span>成長ログ</span>
+              <label class="toggle-button">
+                <input type="checkbox" id="showDiceLog"/>
+                <span class="slider"></span>
+                <span class="checked">表示</span>
+                <span class="not-checked">非表示</span>
+              </label>
+            </div>
+
+            <h2>SETTING</h2>
+            <div class="twoGrid">
+
+              複製コマ
+              <label class="toggle-button">
+                <input type="checkbox" id="noDupCheckbox" checked/>
+                <span class="slider"></span>
+                <span class="not-checked">分ける</span>
+                <span class="checked">まとめる</span>
+              </label>
+
+              <div class="cocSetting">
+                ダイス
+                <select id="totalStyle">
+                  <option value="cc">CC</option>
+                  <option value="ccb">CCB</option>
+                  <option value="log" selected>ログ依存</option>
+                </select>
+              </div>
+
+              <div class="logSetting cocSetting">
+                並び替え
+                <select id="sortStyle">
+                  <option value="growth" selected>C / F</option>
+                  <option value="skill">技能名</option>
+                  <option value="roll">ロール順</option>
+                </select>
+              </div>
+              
+              <div class="logSetting">
+                表示形式
+                <select id="showStyle">
+                  <option value="list" selected>項目ごと</option>
+                  <option value="log">ログ文章</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div class="logSetting cocSetting twoGrid" style="grid-template-columns: repeat(2, auto 1fr);">
+
+              <h2 style="grid-column: 1 / -1;">GROWTH</h2>
+              
+              Critical
+              <label class="toggle-button">
+                <input type="checkbox" name="growTarget" value="C" checked>
+                <span class="slider"></span>
+              </label>
+
+              Fumble
+              <label class="toggle-button">
+                <input type="checkbox" name="growTarget" value="F" checked>
+                <span class="slider"></span>
+              </label>
+
+              <span>Special</span>
+              <label class="toggle-button">
+                <input type="checkbox" name="growTarget" value="S">
+                <span class="slider"></span>
+              </label>
+
+              <div>
+                初期値
+                <span class="material-symbols-outlined">info</span>
+                <div class="tips">
+                  <ul>
+                    <h3>6版</h3>
+                    <li class="ng">回避</li>
+                    <li class="ng">母国語</li>
+                    <li>キック</li>
+                    <li>組み付き</li>
+                    <li>こぶし</li>
+                    <li>パンチ</li>
+                    <li>頭突き</li>
+                    <li>投擲</li>
+                    <li>マーシャルアーツ</li>
+                    <li>拳銃</li>
+                    <li>サブマシンガン</li>
+                    <li>ショットガン</li>
+                    <li>マシンガン</li>
+                    <li>ライフル</li>
+                    <li>杖</li>
+                    <li>応急手当</li>
+                    <li>鍵開け</li>
+                    <li>隠す</li>
+                    <li>隠れる</li>
+                    <li>聞き耳</li>
+                    <li>忍び歩き</li>
+                    <li>写真術</li>
+                    <li>精神分析</li>
+                    <li>追跡</li>
+                    <li>登攀</li>
+                    <li>図書館</li>
+                    <li>目星</li>
+                    <li>運転</li>
+                    <li>機械修理</li>
+                    <li>重機械操作</li>
+                    <li>乗馬</li>
+                    <li>水泳</li>
+                    <li>製作</li>
+                    <li>操縦</li>
+                    <li>跳躍</li>
+                    <li>電気修理</li>
+                    <li>ナビゲート</li>
+                    <li>変装</li>
+                    <li>言いくるめ</li>
+                    <li>信用</li>
+                    <li>説得</li>
+                    <li>値切り</li>
+                    <li>医学</li>
+                    <li>オカルト</li>
+                    <li>化学</li>
+                    <li>芸術</li>
+                    <li>経理</li>
+                    <li>考古学</li>
+                    <li>コンピューター</li>
+                    <li>心理学</li>
+                    <li>人類学</li>
+                    <li>生物学</li>
+                    <li>地質学</li>
+                    <li>電子工学</li>
+                    <li>天文学</li>
+                    <li>博物学</li>
+                    <li>物理学</li>
+                    <li>法律</li>
+                    <li>薬学</li>
+                    <li>歴史</li>
+                  </ul>
+                  <ul>
+                    <h3>7版</h3>
+                    <li class="ng">回避</li>
+                    <li class="ng">母国語</li>
+                    <li>近接戦闘：斧</li>
+                    <li>近接戦闘：格闘</li>
+                    <li>近接戦闘：絞殺ひも</li>
+                    <li>近接戦闘：チェーンソー</li>
+                    <li>近接戦闘：刀剣</li>
+                    <li>近接戦闘：フレイル</li>
+                    <li>近接戦闘：むち</li>
+                    <li>近接戦闘：槍</li>
+                    <li>投擲</li>
+                    <li>射撃：火炎放射器</li>
+                    <li>射撃：拳銃</li>
+                    <li>射撃：サブマシンガン</li>
+                    <li>射撃：重火器</li>
+                    <li>射撃：マシンガン</li>
+                    <li>射撃：弓</li>
+                    <li>射撃：ライフル</li>
+                    <li>射撃：ショットガン</li>
+                    <li>応急手当</li>
+                    <li>鍵開け</li>
+                    <li>手さばき</li>
+                    <li>聞き耳</li>
+                    <li>隠密</li>
+                    <li>精神分析</li>
+                    <li>追跡</li>
+                    <li>図書館</li>
+                    <li>目星</li>
+                    <li>鑑定</li>
+                    <li>運転</li>
+                    <li>機械修理</li>
+                    <li>重機械操作</li>
+                    <li>乗馬</li>
+                    <li>水泳</li>
+                    <li>製作</li>
+                    <li>操縦</li>
+                    <li>跳躍</li>
+                    <li>電気修理</li>
+                    <li>ナビゲート</li>
+                    <li>変装</li>
+                    <li>言いくるめ</li>
+                    <li>説得</li>
+                    <li>威圧</li>
+                    <li>魅惑</li>
+                    <li>言語</li>
+                    <li>医学</li>
+                    <li>オカルト</li>
+                    <li>芸術</li>
+                    <li>経理</li>
+                    <li>考古学</li>
+                    <li>コンピューター</li>
+                    <li>科学</li>
+                    <li>心理学</li>
+                    <li>人類学</li>
+                    <li>電子工学</li>
+                    <li>自然</li>
+                    <li>法律</li>
+                    <li>歴史</li>
+                    <li>サバイバル</li>
+                  </ul>
+                </div>
+              </div>
+              <label class="toggle-button">
+                <input type="checkbox" name="growTarget" value="I" checked>
+                <span class="slider"></span>
+              </label>
+
+              指定技能
+              <label class="toggle-button">
+                <input type="checkbox" name="growTarget" value="E">
+                <span class="slider"></span>
+              </label>
+              <div class="hiddenSetting"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div>
+        <div>
+          <button id="selectTab" class="tab-button" popovertarget="modal">集計タブ</button>
+          <button id="editLog" class="tab-button" popovertarget="modal">ログ編集</button>
+        </div>
+
+        <hr color="lightgray" style="margin-block: 1.5rem;">
+        
+        <div id="result"></div>
+
+        <template id="eachResultTemplate">
+          <div class="each-result">
+            <h3></h3>
+            <div class="each-result-content">
+              <div class="select-tag-wrapper"></div>
+              <table class="diceTotal">
+                <thead></thead>
+                <tbody></tbody>
+              </table>
+              <table class="diceLog">
+                <caption></caption>
+                <thead></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </template>
+
+      </div>
+    </main>
+
+    <footer>
+      <div class="footerContent">
+        <div>
+          <h2>CONTACT</h2>
+          <p style="font-size: larger;">セイル</p>
+          <p>Booth: https://seils.booth.pm/</p>
+          <p>X(旧Twitter): @seilor0</p>
+        </div>
+        <div>
+          <h2>CAUTION</h2>
+          <ul>
+            <li>
+              作業環境：Windows11 / Google Chrome
+              <br>
+              上記以外の環境はテストしていないため、不具合が出る可能性があります。
+            </li>
+            <li>
+              当サイトの利用によるいかなるトラブルも作者は責任を負いません。
+              <br>
+              ご利用は自己責任にてお願いいたします。
+            </li>
+            <li>
+              何かあれば左の連絡先までご連絡ください。
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2>UPDATE</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>date</th>
+                <th>version</th>
+                <th>detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2025.08.13</td>
+                <td>1.0</td>
+                <td>サイト公開</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <pre style="text-align: center;margin-block-end: unset;white-space: pre-wrap;">
+当サイトは、「株式会社アークライト」及び「株式会社KADOKAWA」が権利を有する『クトゥルフ神話TRPG』シリーズの二次創作物です。
+Call of Cthulhu is copyright ©1981, 2015, 2019 by Chaosium Inc. ;all rights reserved. Arranged by Arclight Inc. Call of Cthulhu is a registered trademark of Chaosium Inc.
+PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥルフ神話TRPG」</pre>
+    </footer>
+
+    <dialog class="modal" id="modal" popover="auto">
+      <header>
+        <h2></h2>
+        <button class="icon-frame" popovertarget="modal" popovertargetaction="hide">
+          <div class="icon icon-close"></div>
+        </button>
+      </header>
+      <section class="modal-body"></section>
+    </dialog>
+  </div>
+  <script type="module" src="code.js"></script>
+</body>
+
+</html>
