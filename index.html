@@ -17,260 +17,147 @@
 </head>
 
 <body>
-  <div id="root" data-flag="1">
+  <div id="root">
     <main>
       <aside>
         <div>
           <h1>出目集計ツール</h1>
-          <button class="fileButton">ログを選択</button>
-          <input type="file" accept="text/html" multiple>
-
-          <button class="fileButton add">追加</button>
-          <input type="file" accept="text/html" multiple>
-
-          <div style="display: flex;gap: 0.25rem;flex-direction: column;">
+          <div style="padding-inline: 2.5rem;padding-block-end: 1.5rem;">
+            <div style="margin-block: 1.5rem;">
+              <button class="file-button"
+                @click="$event.currentTarget.nextElementSibling.click()"
+                @dragenter="$event.currentTarget.classList.add('target')"
+                @dragleave="$event.currentTarget.classList.remove('target')"
+                @dragover.prevent
+                @drop.prevent="dropHtmlFile($event, false)"
+              >ログを選択</button>
+              <input type="file" accept="text/html" multiple @change="readHtmlFile($event, false)">
+    
+              <button class="file-button add"
+                @click="$event.currentTarget.nextElementSibling.click()"
+                @dragenter="$event.currentTarget.classList.add('target')"
+                @dragleave="$event.currentTarget.classList.remove('target')"
+                @dragover.prevent
+                @drop.prevent="dropHtmlFile($event, true)"
+              >追加</button>
+              <input type="file" accept="text/html" multiple @change="readHtmlFile($event, true)">
+            </div>
+  
             <h2>SYSTEM</h2>
-            <label><input type="radio" name="system" value="coc6th" checked>CoC6th</label>
-            <label><input type="radio" name="system" value="coc7th">CoC7th</label>
-            <label><input type="radio" name="system" value="emoklore">Emo-klore</label>
-
-            <h2>DISPLAY</h2>
+            <div style="display: flex;flex-direction: column;gap: 0.25rem;">
+              <label><input type="radio" v-model="system" value="coc6th">CoC6th</label>
+              <label><input type="radio" v-model="system" value="coc7th">CoC7th</label>
+              <label><input type="radio" v-model="system" value="emoklore">Emo-klore</label>
+            </div>
             
-            <div class="twoGrid">
+            <h2>DISPLAY</h2>
+            <div class="two-grid">
               キャラ選択
-              <label class="toggle-button">
-                <input type="checkbox" id="showSelectTag"/>
-                <span class="slider"></span>
-                <span class="checked">表示</span>
-                <span class="not-checked">非表示</span>
-              </label>
+              <toggle-button :top-is-slider="true"
+                :is-checked="setting.show.selectTag" @checked-toggle="val=>setting.show.selectTag=val"
+                text-checked="表示" text-not-checked="非表示"
+              ></toggle-button>
               
               集計結果
-              <label class="toggle-button">
-                <input type="checkbox" id="showTotal" checked/>
-                <span class="slider"></span>
-                <span class="checked">表示</span>
-                <span class="not-checked">非表示</span>
-              </label>
+              <toggle-button :top-is-slider="true"
+                :is-checked="setting.show.total" @checked-toggle="val=>setting.show.total=val"
+                text-checked="表示" text-not-checked="非表示"
+              ></toggle-button>
               
-              <span>成長ログ</span>
-              <label class="toggle-button">
-                <input type="checkbox" id="showDiceLog"/>
-                <span class="slider"></span>
-                <span class="checked">表示</span>
-                <span class="not-checked">非表示</span>
-              </label>
+              {{isCoC ? '成長ログ' : 'ダイスログ'}}
+              <toggle-button :top-is-slider="true"
+                :is-checked="setting.show.diceLog" @checked-toggle="val=>setting.show.diceLog=val"
+                text-checked="表示" text-not-checked="非表示"
+              ></toggle-button>
             </div>
 
             <h2>SETTING</h2>
-            <div class="twoGrid">
-
+            <div class="two-grid">  
               複製コマ
-              <label class="toggle-button">
-                <input type="checkbox" id="noDupCheckbox" checked/>
-                <span class="slider"></span>
-                <span class="not-checked">分ける</span>
-                <span class="checked">まとめる</span>
-              </label>
+              <toggle-button :top-is-slider="true"
+                :is-checked="setting.mergeDupUnit" @checked-toggle="val=>setting.mergeDupUnit=val"
+                text-checked="まとめる" text-not-checked="分ける"
+              ></toggle-button>
 
-              <div class="cocSetting">
+              <template v-if="isCoC">
                 ダイス
-                <select id="totalStyle">
+                <select v-model="setting.totalStyle">
                   <option value="cc">CC</option>
                   <option value="ccb">CCB</option>
-                  <option value="log" selected>ログ依存</option>
+                  <option value="log">ログ依存</option>
                 </select>
-              </div>
+              </template>
 
-              <div class="logSetting cocSetting">
+              <template v-if="isCoC && setting.show.diceLog">
                 並び替え
-                <select id="sortStyle">
-                  <option value="growth" selected>C / F</option>
+                <select v-model="setting.sortStyle">
+                  <option value="growth">C / F</option>
                   <option value="skill">技能名</option>
                   <option value="roll">ロール順</option>
                 </select>
-              </div>
+              </template>
               
-              <div class="logSetting">
+              <template v-if="setting.show.diceLog">
                 表示形式
-                <select id="showStyle">
-                  <option value="list" selected>項目ごと</option>
+                <select v-model="setting.showStyle">
+                  <option value="list">項目ごと</option>
                   <option value="log">ログ文章</option>
                 </select>
-              </div>
-
+              </template>
             </div>
-
-            <div class="logSetting cocSetting twoGrid" style="grid-template-columns: repeat(2, auto 1fr);">
-
-              <h2 style="grid-column: 1 / -1;">GROWTH</h2>
-              
+            
+            <h2 v-if="isCoC && setting.show.diceLog">GROWTH</h2>
+            <div v-if="isCoC && setting.show.diceLog" class="two-grid" style="grid-template-columns: repeat(2, auto 1fr);">
               Critical
               <label class="toggle-button">
-                <input type="checkbox" name="growTarget" value="C" checked>
+                <input type="checkbox" value="C" v-model="setting.growTarget">
                 <span class="slider"></span>
               </label>
 
               Fumble
               <label class="toggle-button">
-                <input type="checkbox" name="growTarget" value="F" checked>
+                <input type="checkbox" value="F" v-model="setting.growTarget">
                 <span class="slider"></span>
               </label>
 
-              <span>Special</span>
+              {{system==='coc6th' ? 'Special' : 'Extreme'}}
               <label class="toggle-button">
-                <input type="checkbox" name="growTarget" value="S">
+                <input type="checkbox" value="S" v-model="setting.growTarget">
                 <span class="slider"></span>
               </label>
 
               <div>
                 初期値
-                <span class="material-symbols-outlined">info</span>
                 <div class="tips">
-                  <ul>
-                    <h3>6版</h3>
-                    <li class="ng">回避</li>
-                    <li class="ng">母国語</li>
-                    <li>キック</li>
-                    <li>組み付き</li>
-                    <li>こぶし</li>
-                    <li>パンチ</li>
-                    <li>頭突き</li>
-                    <li>投擲</li>
-                    <li>マーシャルアーツ</li>
-                    <li>拳銃</li>
-                    <li>サブマシンガン</li>
-                    <li>ショットガン</li>
-                    <li>マシンガン</li>
-                    <li>ライフル</li>
-                    <li>杖</li>
-                    <li>応急手当</li>
-                    <li>鍵開け</li>
-                    <li>隠す</li>
-                    <li>隠れる</li>
-                    <li>聞き耳</li>
-                    <li>忍び歩き</li>
-                    <li>写真術</li>
-                    <li>精神分析</li>
-                    <li>追跡</li>
-                    <li>登攀</li>
-                    <li>図書館</li>
-                    <li>目星</li>
-                    <li>運転</li>
-                    <li>機械修理</li>
-                    <li>重機械操作</li>
-                    <li>乗馬</li>
-                    <li>水泳</li>
-                    <li>製作</li>
-                    <li>操縦</li>
-                    <li>跳躍</li>
-                    <li>電気修理</li>
-                    <li>ナビゲート</li>
-                    <li>変装</li>
-                    <li>言いくるめ</li>
-                    <li>信用</li>
-                    <li>説得</li>
-                    <li>値切り</li>
-                    <li>医学</li>
-                    <li>オカルト</li>
-                    <li>化学</li>
-                    <li>芸術</li>
-                    <li>経理</li>
-                    <li>考古学</li>
-                    <li>コンピューター</li>
-                    <li>心理学</li>
-                    <li>人類学</li>
-                    <li>生物学</li>
-                    <li>地質学</li>
-                    <li>電子工学</li>
-                    <li>天文学</li>
-                    <li>博物学</li>
-                    <li>物理学</li>
-                    <li>法律</li>
-                    <li>薬学</li>
-                    <li>歴史</li>
-                  </ul>
-                  <ul>
-                    <h3>7版</h3>
-                    <li class="ng">回避</li>
-                    <li class="ng">母国語</li>
-                    <li>近接戦闘：斧</li>
-                    <li>近接戦闘：格闘</li>
-                    <li>近接戦闘：絞殺ひも</li>
-                    <li>近接戦闘：チェーンソー</li>
-                    <li>近接戦闘：刀剣</li>
-                    <li>近接戦闘：フレイル</li>
-                    <li>近接戦闘：むち</li>
-                    <li>近接戦闘：槍</li>
-                    <li>投擲</li>
-                    <li>射撃：火炎放射器</li>
-                    <li>射撃：拳銃</li>
-                    <li>射撃：サブマシンガン</li>
-                    <li>射撃：重火器</li>
-                    <li>射撃：マシンガン</li>
-                    <li>射撃：弓</li>
-                    <li>射撃：ライフル</li>
-                    <li>射撃：ショットガン</li>
-                    <li>応急手当</li>
-                    <li>鍵開け</li>
-                    <li>手さばき</li>
-                    <li>聞き耳</li>
-                    <li>隠密</li>
-                    <li>精神分析</li>
-                    <li>追跡</li>
-                    <li>図書館</li>
-                    <li>目星</li>
-                    <li>鑑定</li>
-                    <li>運転</li>
-                    <li>機械修理</li>
-                    <li>重機械操作</li>
-                    <li>乗馬</li>
-                    <li>水泳</li>
-                    <li>製作</li>
-                    <li>操縦</li>
-                    <li>跳躍</li>
-                    <li>電気修理</li>
-                    <li>ナビゲート</li>
-                    <li>変装</li>
-                    <li>言いくるめ</li>
-                    <li>説得</li>
-                    <li>威圧</li>
-                    <li>魅惑</li>
-                    <li>言語</li>
-                    <li>医学</li>
-                    <li>オカルト</li>
-                    <li>芸術</li>
-                    <li>経理</li>
-                    <li>考古学</li>
-                    <li>コンピューター</li>
-                    <li>科学</li>
-                    <li>心理学</li>
-                    <li>人類学</li>
-                    <li>電子工学</li>
-                    <li>自然</li>
-                    <li>法律</li>
-                    <li>歴史</li>
-                    <li>サバイバル</li>
-                  </ul>
+                  <span class="material-symbols-outlined">info</span>
+                  <div>
+                    <ul>
+                      <li class="ng">回避</li>
+                      <li class="ng">母国語</li>
+                      <li v-for="key in initSkills[system].keys()">{{key}}</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
               <label class="toggle-button">
-                <input type="checkbox" name="growTarget" value="I" checked>
+                <input type="checkbox" value="I" v-model="setting.growTarget">
                 <span class="slider"></span>
               </label>
 
               指定技能
               <label class="toggle-button">
-                <input type="checkbox" name="growTarget" value="E">
+                <input type="checkbox" value="E" v-model="setting.growTarget">
                 <span class="slider"></span>
               </label>
-              <div class="hiddenSetting"></div>
             </div>
+            <multi-select v-if="isCoC && setting.show.diceLog && setting.growTarget.includes('E')"
+              select-id="multi-select" :options="skillSet" style="margin-block-start: 0.5rem;"
+            ></multi-select>
           </div>
         </div>
       </aside>
 
-      <div>
+      <div style="padding: 2.5rem 4rem;">
         <div>
           <button id="selectTab" class="tab-button" popovertarget="modal">集計タブ</button>
           <button id="editLog" class="tab-button" popovertarget="modal">ログ編集</button>
@@ -353,17 +240,16 @@ Call of Cthulhu is copyright ©1981, 2015, 2019 by Chaosium Inc. ;all rights res
 PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥルフ神話TRPG」</pre>
     </footer>
 
-    <dialog class="modal" id="modal" popover="auto">
+    <dialog class="modal" id="modal" closedby="any">
       <header>
         <h2></h2>
-        <button class="icon-frame" popovertarget="modal" popovertargetaction="hide">
-          <div class="icon icon-close"></div>
-        </button>
+        <button-css-icon icon-name="icon-close" command="close" commandfor="modal"></button-css-icon>
       </header>
       <section class="modal-body"></section>
     </dialog>
   </div>
-  <script type="module" src="code.js"></script>
+  <!-- <script type="module" src="code.js"></script> -->
+  <script type="module" src="code_vue.js"></script>
 </body>
 
 </html>

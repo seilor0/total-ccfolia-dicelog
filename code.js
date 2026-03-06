@@ -1,10 +1,10 @@
-import {floatRound, batchMove} from '../__utility/function.js';
+import {floatRound} from '../__utility/function.js';
 import {createMultiSelect, setOptions2MultiSelect, addRow} from '../__utility/function.js';
 import {dragEnter, dragLeave, dragOver, clickNextInput} from '../__utility/function.js';
 
 const resultDiv       = document.getElementById('result');
 const noDupCheckbox   = document.getElementById('noDupCheckbox');
-const showLogCheckbox = document.getElementById('showDiceLog');
+// const showLogCheckbox = document.getElementById('showDiceLog');
 const modal           = document.getElementById('modal');
 
 /**
@@ -23,8 +23,8 @@ let rollArr = [];
 let tabMap = new Map();
 let nameSet, nameNodupSet;
 
+// in:杖/拳銃/日本刀  out:クトゥルフ神話（初期値で振ることがないため）
 const allInitSkill_6 = new Map([
-  // in:杖/拳銃  out:クトゥルフ神話（初期値で振ることがないため）
   ['キック', 25],
   ['組み付き', 25],
   ['こぶし', 50],
@@ -84,8 +84,8 @@ const allInitSkill_6 = new Map([
   ['薬学', 1],
   ['歴史', 20]
 ]);
+// '回避': Math.floor(stats.dex/2),	// 7版ver. dex
 const allInitSkill_7 = new Map([
-  // '回避': Math.floor(stats.dex/2),	// 7版ver. dex
   ['斧', 15],
   ['格闘', 25],
   ['絞殺ひも', 15],
@@ -152,22 +152,22 @@ multiSelect.getElementById('multiSelect').addEventListener('click', totalRoll);
 //      ログ読み込み関連
 // -------------------------
 
-// ファイルボタン
-document.querySelectorAll('button.fileButton').forEach(button => {
-  button.addEventListener('click',clickNextInput);
-  button.addEventListener('dragenter',dragEnter);
-  button.addEventListener('dragleave',dragLeave);
-  button.addEventListener('dragover',dragOver);
-  button.addEventListener('drop',drop);
-});
+// // ファイルボタン
+// document.querySelectorAll('button.fileButton').forEach(button => {
+//   button.addEventListener('click',clickNextInput);
+//   button.addEventListener('dragenter',dragEnter);
+//   button.addEventListener('dragleave',dragLeave);
+//   button.addEventListener('dragover',dragOver);
+//   button.addEventListener('drop',drop);
+// });
 
 // ログが読み込まれた時
 document.querySelectorAll('input[type=file]').forEach(input =>
   input.addEventListener('change', async (e) => {
-    if (!e.currentTarget.files.length) return;
-    if (!e.currentTarget.previousElementSibling.classList.contains('add')) chatArr = [];
-    await Promise.all(Array.from(e.currentTarget.files, file => extractChat(file)));
-    extractRoll();
+    // if (!e.currentTarget.files.length) return;
+    // if (!e.currentTarget.previousElementSibling.classList.contains('add')) chatArr = [];
+    // await Promise.all(Array.from(e.currentTarget.files, file => extractChat(file)));
+    // extractRoll();
     showResult();
   })
 );
@@ -298,11 +298,11 @@ document.getElementById('editLog').addEventListener('click', () => {
 // -------------------------
 // システム
 document.getElementsByName('system').forEach(radio => {
-  radio.addEventListener('change', (e) => {
-    batchMove(showLogCheckbox,'↑↑←').textContent = e.currentTarget.value.startsWith('coc') ? '成長ログ' : 'ダイスログ';
-    batchMove(document.querySelector('[name=growTarget][value=S]'),'↑←').textContent = e.currentTarget.value=='coc7th' ? 'Extreme' : 'Special';
-  });
-  radio.addEventListener('change', extractRoll);
+  // radio.addEventListener('change', (e) => {
+  //   batchMove(showLogCheckbox,'↑↑←').textContent = e.currentTarget.value.startsWith('coc') ? '成長ログ' : 'ダイスログ';
+  //   batchMove(document.querySelector('[name=growTarget][value=S]'),'↑←').textContent = e.currentTarget.value=='coc7th' ? 'Extreme' : 'Special';
+  // });
+  // radio.addEventListener('change', extractRoll);
   radio.addEventListener('change', showResult);
 });
 
@@ -322,43 +322,43 @@ document.getElementsByName('growTarget').forEach(input=>input.addEventListener('
 //         メイン処理
 // -------------------------
 
-/**
- * ファイルから{タブ,発言者,ログ}を抽出してchatArrに格納する関数
- * @param {htmlFile} file ログファイル
- */
-async function extractChat(file) {
-  console.log('start of extractChat -->');
-  if (file.type != 'text/html') return;
+// /**
+//  * ファイルから{タブ,発言者,ログ}を抽出してchatArrに格納する関数
+//  * @param {htmlFile} file ログファイル
+//  */
+// async function extractChat(file) {
+//   console.log('start of extractChat -->');
+//   if (file.type != 'text/html') return;
 
-  const parser = new DOMParser;
-  const doc = parser.parseFromString(await file.text(), 'text/html');
+//   const parser = new DOMParser;
+//   const doc = parser.parseFromString(await file.text(), 'text/html');
   
-  // 初回処理
-  if (document.getElementById('root').dataset.flag)  delete document.getElementById('root').dataset.flag;
+//   // 初回処理
+//   if (document.getElementById('root').dataset.flag)  delete document.getElementById('root').dataset.flag;
 
-  // 抽出
-  doc.querySelectorAll('p').forEach(chat => {
-    const arr  = chat.querySelectorAll('span');
+//   // 抽出
+//   doc.querySelectorAll('p').forEach(chat => {
+//     const arr  = chat.querySelectorAll('span');
 
-    const tab  = arr[0].innerText.trim().slice(1,-1);
-    const name = arr[1].innerText.replaceAll('　',' ').trim();
-    const nameNodup = name.replace(/ *\(\d+\)$/,'');
-    const log  = normStr(arr[2].innerHTML).trim();
+//     const tab  = arr[0].innerText.trim().slice(1,-1);
+//     const name = arr[1].innerText.replaceAll('　',' ').trim();
+//     const nameNodup = name.replace(/ *\(\d+\)$/,'');
+//     const log  = normStr(arr[2].innerHTML).trim();
 
-    const textArr = log.split(/#\d+/);
-    if (textArr.length > 1) {
-      const head = textArr.shift();
-      textArr.forEach(t => 
-        chatArr.push({tab:tab, name:name, nameNodup:nameNodup, log:`${head}${t.replaceAll('\n',' ')}`.trim()})
-      );
-      return;
-    }
-    chatArr.push({tab:tab, name:name, nameNodup:nameNodup, log:log});
-  });
-  console.log('chatArr', chatArr);
-  console.log('--> end of extractChat');
-  return;
-}
+//     const textArr = log.split(/#\d+/);
+//     if (textArr.length > 1) {
+//       const head = textArr.shift();
+//       textArr.forEach(t => 
+//         chatArr.push({tab:tab, name:name, nameNodup:nameNodup, log:`${head}${t.replaceAll('\n',' ')}`.trim()})
+//       );
+//       return;
+//     }
+//     chatArr.push({tab:tab, name:name, nameNodup:nameNodup, log:log});
+//   });
+//   console.log('chatArr', chatArr);
+//   console.log('--> end of extractChat');
+//   return;
+// }
 
 /**
  * chatArrから判定情報を抽出してrollArrに格納する関数（nameSet, nameNodupSet, tabMapも更新）
@@ -736,11 +736,11 @@ function normStr(str) {
 
 // EventListener
 async function drop(e) {
-  e.preventDefault();
-  e.currentTarget.classList.remove('target');
-  if (!e.currentTarget.classList.contains('add')) chatArr = [];
-  await Promise.all(Array.from(e.dataTransfer.files, file => extractChat(file)));
-  extractRoll();
+  // e.preventDefault();
+  // e.currentTarget.classList.remove('target');
+  // if (!e.currentTarget.classList.contains('add')) chatArr = [];
+  // await Promise.all(Array.from(e.dataTransfer.files, file => extractChat(file)));
+  // extractRoll();
   showResult();
   return;
 }
