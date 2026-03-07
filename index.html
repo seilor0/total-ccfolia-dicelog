@@ -41,6 +41,8 @@
                 @drop.prevent="dropHtmlFile($event, true)"
               >追加</button>
               <input type="file" accept="text/html" multiple @change="readHtmlFile($event, true)">
+
+              <button class="file-button add" @click="chatArr.splice(0)">クリア</button>
             </div>
 
             <h2>SYSTEM</h2>
@@ -139,7 +141,7 @@
 
       <div style="padding: 2.5rem 4rem;">
         <div id="result">
-          <result-card  key="ALL" class="all"
+          <result-card v-if="chatArr.length" key="ALL" class="all"
             character="ALL"
             :dice-log-head="diceLogHead"
             :result-data="allResultData"
