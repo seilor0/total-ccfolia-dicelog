@@ -425,7 +425,7 @@ const rootApp = createApp({
       initSkills,
 
       chatArr,
-      rollArr,
+      // rollArr,
 
       skillSet,
       tabMap,
