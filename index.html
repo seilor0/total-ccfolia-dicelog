@@ -8,7 +8,7 @@
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300..700" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=info" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=info,settings" />
 
   <link rel="stylesheet" href="../__utility/style.css" />
   <link rel="stylesheet" href="style.css" />
@@ -42,7 +42,7 @@
               >追加</button>
               <input type="file" accept="text/html" multiple @change="readHtmlFile($event, true)">
             </div>
-  
+
             <h2>SYSTEM</h2>
             <div style="display: flex;flex-direction: column;gap: 0.25rem;">
               <label><input type="radio" v-model="system" value="coc6th">CoC6th</label>
@@ -69,41 +69,6 @@
                 :is-checked="setting.show.diceLog" @checked-toggle="val=>setting.show.diceLog=val"
                 text-checked="表示" text-not-checked="非表示"
               ></toggle-button>
-            </div>
-
-            <h2>SETTING</h2>
-            <div class="two-grid">  
-              複製コマ
-              <toggle-button :top-is-slider="true"
-                :is-checked="setting.mergeDupUnit" @checked-toggle="val=>setting.mergeDupUnit=val"
-                text-checked="まとめる" text-not-checked="分ける"
-              ></toggle-button>
-
-              <template v-if="isCoC">
-                ダイス
-                <select v-model="setting.totalStyle">
-                  <option value="cc">CC</option>
-                  <option value="ccb">CCB</option>
-                  <option value="log">ログ依存</option>
-                </select>
-              </template>
-
-              <template v-if="isCoC && setting.show.diceLog">
-                並び替え
-                <select v-model="setting.sortStyle">
-                  <option value="growth">C / F</option>
-                  <option value="skill">技能名</option>
-                  <option value="rollNo">ロール順</option>
-                </select>
-              </template>
-              
-              <template v-if="setting.show.diceLog">
-                表示形式
-                <select v-model="setting.showStyle">
-                  <option value="list">項目ごと</option>
-                  <option value="log">ログ文章</option>
-                </select>
-              </template>
             </div>
             
             <h2 v-if="isCoC && setting.show.diceLog">GROWTH</h2>
@@ -157,18 +122,22 @@
               @change-selected-options="options => setting.selectedSkills=options"
               style="margin-block-start: 0.5rem;"
             ></multi-select>
+
+            <h2>ELSE</h2>
+            <div style="display: flex;gap: 0.5rem;">
+              <button style="display: flex;align-items: center;" command="show-modal" commandfor="setting-modal">
+                <span class="material-symbols-outlined">settings</span>
+                設定
+              </button>
+              <button style="display: flex;align-items: center;" command="show-modal" commandfor="log-modal">
+                ログ編集
+              </button>
+            </div>
           </div>
         </div>
       </aside>
 
       <div style="padding: 2.5rem 4rem;">
-        <div>
-          <button id="selectTab" class="tab-button" popovertarget="modal">集計タブ</button>
-          <button id="editLog" class="tab-button" popovertarget="modal">ログ編集</button>
-        </div>
-
-        <hr color="lightgray" style="margin-block: 1.5rem;">
-        
         <div id="result">
           <result-card  key="ALL" class="all"
             character="ALL"
@@ -245,12 +214,81 @@ Call of Cthulhu is copyright ©1981, 2015, 2019 by Chaosium Inc. ;all rights res
 PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥルフ神話TRPG」</pre>
     </footer>
 
-    <dialog class="modal" id="modal" closedby="any">
+    <dialog class="modal" id="log-modal" closedby="any">
       <header>
-        <h2></h2>
-        <button-css-icon icon-name="icon-close" command="close" commandfor="modal"></button-css-icon>
+        <div style="display: flex;gap: 8px;">
+          <h2>ログを編集</h2>
+          <button @click="deleteLog" style="user-select: none;">delete</button>
+        </div>
+        <button-css-icon icon-name="icon-close" command="close" commandfor="log-modal"></button-css-icon>
       </header>
-      <section class="modal-body"></section>
+      <section class="modal-body">
+        <div class="log-wrap" tabindex="-1" @keyup.delete="deleteLog">
+          <div v-for="(chat, index) in chatArr" :data-index="index">
+            <span>{{chat.tab}}</span>
+            <span>{{chat.name}}</span>
+            <p>{{chat.log}}</p>
+          </div>
+        </div>
+      </section>
+    </dialog>
+    
+    <dialog class="modal" id="setting-modal" closedby="any">
+      <header>
+        <h2>SETTING</h2>
+        <button-css-icon icon-name="icon-close" command="close" commandfor="setting-modal"></button-css-icon>
+      </header>
+      <section class="modal-body">
+        <div class="two-grid" style="align-items: start;">
+          複製コマ
+          <toggle-button :top-is-slider="true"
+            :is-checked="setting.mergeDupUnit" @checked-toggle="val=>setting.mergeDupUnit=val"
+            text-checked="まとめる" text-not-checked="分ける"
+          ></toggle-button>
+
+          <template v-if="isCoC">
+            ダイス
+            <select v-model="setting.totalStyle">
+              <option value="cc">CC</option>
+              <option value="ccb">CCB</option>
+              <option value="log">ログ依存</option>
+            </select>
+          </template>
+
+          <template v-if="isCoC && setting.show.diceLog">
+            並び替え
+            <select v-model="setting.sortStyle">
+              <option value="growth">C / F</option>
+              <option value="skill">技能名</option>
+              <option value="rollNo">ロール順</option>
+            </select>
+          </template>
+          
+          <template v-if="setting.show.diceLog">
+            表示形式
+            <select v-model="setting.showStyle">
+              <option value="list">項目ごと</option>
+              <option value="log">ログ文章</option>
+            </select>
+          </template>
+
+          集計タブ
+          <div>
+            <label style="font-size: smaller;display: flex;margin-block: 2px;">
+              <input type="checkbox" @change="tabMap.keys().forEach(key=>tabMap.set(key, $event.currentTarget.checked))" checked/>
+              全てのタブ
+            </label>
+            <div class="select-tag-wrapper" style="max-width: 25dvw;">
+              <label v-for="[tab, flag] in tabMap" class="select-tag">
+                <input type="checkbox" :value="tab" 
+                  :checked="flag" @change="tabMap.set(tab, $event.currentTarget.checked)" />
+                {{tab}}
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </section>
     </dialog>
   </div>
   <!-- <script type="module" src="code.js"></script> -->

@@ -17,14 +17,14 @@ const rootApp = createApp({
     const system = ref('coc6th');
     const isCoC = computed(()=>system.value.startsWith('coc'));
     const setting = ref({
-      show: {selectTag: false, total: true, diceLog: true},
+      show: {selectTag: false, total: true, diceLog: false},
 
       mergeDupUnit: true, // 複製コマをまとめる
       totalStyle: 'log', // cc,ccb,log
       sortStyle: 'growth', // growth,skill,roll
       showStyle: 'list', // list,log
 
-      growTarget: ['C','F','S','I','E'], // C,F,S,I,E
+      growTarget: ['C','F','I'], // C,F,S,I,E
       selectedSkills: [],
     });
     const initSkills = ref({
@@ -381,6 +381,30 @@ const rootApp = createApp({
       }
     }
 
+    function deleteLog (e) {
+      console.log('deleteLog');
+      const rangeObj = window.getSelection().getRangeAt(0);
+      if (rangeObj.collapsed) return;
+      
+      const stNode  = rangeObj.startContainer;
+      const endNode = rangeObj.endContainer;
+      const stEl  = stNode.tagName  ? stNode  : stNode.parentElement;
+      const endEl = endNode.tagName ? endNode : endNode.parentElement;
+      let   stRow  = parseInt(stEl.closest('div[data-index]').dataset.index);
+      let   endRow = parseInt(endEl.closest('div[data-index]').dataset.index);
+      
+      // start : 行末の場合
+      if (rangeObj.startOffset==stNode.length && !stEl.nextElementSibling)  stRow++;
+      
+      // end : 行頭の場合
+      if (rangeObj.endOffset==0 && !endEl.previousElementSibling)  endRow--;
+            
+      // 集計に反映
+      chatArr.value.splice(stRow, endRow-stRow+1);
+      window.getSelection().removeAllRanges();
+      e.currentTarget.blur();
+    }
+
 
 
     onMounted(async () => {
@@ -414,6 +438,7 @@ const rootApp = createApp({
 
       readHtmlFile,
       dropHtmlFile,
+      deleteLog,
     }
   }
 });

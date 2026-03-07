@@ -141,6 +141,23 @@
     align-items: center;
   }
 
+  .file-button {
+    --main-color: var(--accent);
+    color: var(--main-color);
+    background-color: transparent;
+    font-size: smaller;
+    box-shadow: 0px 2px 7px rgb(from var(--main-color) r g b / 0.66);
+    margin-block: 0.5rem 0;
+    margin-inline-end: 0.25rem;
+  
+    &.add {--main-color: lightcoral;}
+    &.target, &:active {
+      color: white;
+      background-color: var(--main-color);
+      border-color: var(--main-color);
+    }
+  }
+
   .tips {
     display: inline;
     position: relative;
@@ -188,21 +205,6 @@
 
 }
 
-
-[data-flag] {
-  /* .cocSetting {display: none;} */
-  main > div  {display: none;}
-  button.file-button {--main-color: lightcoral;}
-  button.file-button.add {display: none;}
-  h2:nth-of-type(2) {display: none;}
-  h2:nth-of-type(2) ~ * {display: none;}
-}
-
-.none {display: none;}
-
-
-  
-
 /* --------------------------- */
 
 
@@ -249,9 +251,6 @@
 }
 .each-result-content {padding: 1rem;}
 
-/* #root:has(#showSelectTag:not(:checked)) .each-result .select-tag-wrapper {display: none;} */
-/* #root:has(#showTotal:not(:checked)) .each-result.all {display: none;} */
-/* #root:not(:has(:is(#showSelectTag, #showTotal, #showDiceLog):checked)) .each-result {display: none;} */
 
 /* --------------------------- */
 
@@ -259,7 +258,7 @@
 /* --------------------------- */
 /*            modal            */
 
-#modal {
+.modal {
   background-color: #fafafa;
   border: 1px solid darkgray;
   border-radius: 4px;
@@ -291,7 +290,7 @@
   }
 }
 
-.logWrap {
+.log-wrap {
   display: grid;
   grid-template-columns: minmax(auto,10ch) minmax(auto,20ch) 1fr;
   gap: 0.5rem 1rem;
@@ -308,25 +307,7 @@
 
 /* --------------------------- */
 
-
-button.file-button {
-  --main-color: var(--accent);
-  color: var(--main-color);
-  background-color: transparent;
-  font-size: smaller;
-  box-shadow: 0px 2px 7px rgb(from var(--main-color) r g b / 0.66);
-  margin-block: 0.5rem 0;
-  margin-inline-end: 0.25rem;
-
-  &.add {--main-color: lightcoral;}
-  &.target, &:active {
-    color: white;
-    background-color: var(--main-color);
-    border-color: var(--main-color);
-  }
-}
-
-button.tab-button {
+.tab-button {
   color: white;
   background-color: rgb(95 158 160 / 0.8);
   border: none;
@@ -380,8 +361,6 @@ main table {
   width: stretch;
   border-collapse: collapse;
 
-  #root:has(#showTotal:not(:checked)) & {display: none;}
-
   thead {
     border-block-end: 1px solid darkgray;
   }
@@ -396,13 +375,9 @@ main table {
   }
 }
 
-
 .dice-log-table {
   border-spacing: 0 0.25rem;
   width: stretch;
-
-  /* .each-result:not([data-name]) & {display: none;} */
-  /* #root:has(#showDiceLog:not(:checked)) & {display: none;} */
   
   caption {
     color: darkkhaki;
