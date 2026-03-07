@@ -5,6 +5,7 @@ export default {
   props: {
     selectId: String,
     options: Set,
+    pickerStyle: Object,
   },
   emits: ['change-selected-options'],
   setup () {
@@ -19,7 +20,7 @@ export default {
       <span>{{selectedOptions.sort().join(', ')}}</span>
       <div class="arrow"></div>
     </button>
-    <div :id="selectId" class="multi-picker" popover="hint">
+    <div :id="selectId" class="multi-picker" :style="pickerStyle" popover="hint">
       <label v-for="(option,index) in options" :key="selectId+'-'+index">
         <input type="checkbox" :value="option" v-model="selectedOptions" @change="$emit('change-selected-options', selectedOptions)">
         {{option}}

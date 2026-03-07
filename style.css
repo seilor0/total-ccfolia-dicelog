@@ -161,7 +161,7 @@
       bottom: -5rem;
       left: 3ch;
   
-      &:not(:hover, :hover + &) {display: none;}
+      &:not(:hover + &) {display: none;}
     }
 
     ul {
@@ -249,9 +249,9 @@
 }
 .each-result-content {padding: 1rem;}
 
-#root:has(#showSelectTag:not(:checked)) .each-result .select-tag-wrapper {display: none;}
-#root:has(#showTotal:not(:checked)) .each-result.all {display: none;}
-#root:not(:has(:is(#showSelectTag, #showTotal, #showDiceLog):checked)) .each-result {display: none;}
+/* #root:has(#showSelectTag:not(:checked)) .each-result .select-tag-wrapper {display: none;} */
+/* #root:has(#showTotal:not(:checked)) .each-result.all {display: none;} */
+/* #root:not(:has(:is(#showSelectTag, #showTotal, #showDiceLog):checked)) .each-result {display: none;} */
 
 /* --------------------------- */
 
@@ -369,13 +369,14 @@ main table {
     padding-inline-start: 0.5ch;
   }
   
-  [data-cf^='C'] {color: #00b3ee;}
-  [data-cf^='F'] {color: #ff4c4c;}
-  [data-cf^='S'] {color: rgb(from var(--color) r g b / 0.5);}
+  .C {color: #00b3ee;}
+  .F {color: #ff4c4c;}
+  .S {color: rgb(from var(--color) r g b / 0.5);}
+  .small {font-size: small;}
 }
 
 
-table.diceTotal {
+.dice-total-table {
   width: stretch;
   border-collapse: collapse;
 
@@ -396,12 +397,12 @@ table.diceTotal {
 }
 
 
-table.diceLog {
+.dice-log-table {
   border-spacing: 0 0.25rem;
   width: stretch;
 
-  .each-result:not([data-name]) & {display: none;}
-  #root:has(#showDiceLog:not(:checked)) & {display: none;}
+  /* .each-result:not([data-name]) & {display: none;} */
+  /* #root:has(#showDiceLog:not(:checked)) & {display: none;} */
   
   caption {
     color: darkkhaki;

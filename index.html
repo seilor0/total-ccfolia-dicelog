@@ -93,7 +93,7 @@
                 <select v-model="setting.sortStyle">
                   <option value="growth">C / F</option>
                   <option value="skill">技能名</option>
-                  <option value="roll">ロール順</option>
+                  <option value="rollNo">ロール順</option>
                 </select>
               </template>
               
@@ -151,7 +151,11 @@
               </label>
             </div>
             <multi-select v-if="isCoC && setting.show.diceLog && setting.growTarget.includes('E')"
-              select-id="multi-select" :options="skillSet" style="margin-block-start: 0.5rem;"
+              select-id="multi-select" 
+              :options="skillSet" 
+              :picker-style="{positionArea:'top span-right'}" 
+              @change-selected-options="options => setting.selectedSkills=options"
+              style="margin-block-start: 0.5rem;"
             ></multi-select>
           </div>
         </div>
@@ -165,26 +169,27 @@
 
         <hr color="lightgray" style="margin-block: 1.5rem;">
         
-        <div id="result"></div>
+        <div id="result">
+          <result-card  key="ALL" class="all"
+            character="ALL"
+            :dice-log-head="diceLogHead"
+            :result-data="allResultData"
+            :is-co-c="isCoC"
+            :setting="setting"
+          ></result-card>
 
-        <template id="eachResultTemplate">
-          <div class="each-result">
-            <h3></h3>
-            <div class="each-result-content">
-              <div class="select-tag-wrapper"></div>
-              <table class="diceTotal">
-                <thead></thead>
-                <tbody></tbody>
-              </table>
-              <table class="diceLog">
-                <caption></caption>
-                <thead></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </template>
-
+          <result-card v-for="[character, resultData] in resultDataMap" :key="character"
+            v-show="nameUnifiedMap.get(character).show"
+            :character="character"
+            :dice-log-head="diceLogHead"
+            :result-data="resultData"
+            :is-co-c="isCoC"
+            :setting="setting"
+            :all-characters="nameUnifiedMap"
+            :selected-characters="nameUnifiedMap.get(character).characters"
+            @change-target-characters="(character,target,newState)=>updateNameUnify(character,target,newState)"
+          ></result-card>
+        </div>
       </div>
     </main>
 
