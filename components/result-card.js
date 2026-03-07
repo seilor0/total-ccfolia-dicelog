@@ -26,7 +26,7 @@ export default {
       const head = props.diceLogHead[index];
       if (props.isCoC) {        
         if (head===null)
-          return {'C':content.includes('C'), 'F':content.includes('F'), 'S':/S|Ex/.test(content)};
+          return {'C':content?.includes('C'), 'F':content?.includes('F'), 'S':/S|Ex/.test(content)};
         else if (head==='ログ') return {small:true};
         else return null;        
       } else {
