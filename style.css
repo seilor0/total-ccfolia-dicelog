@@ -11,6 +11,10 @@
 .material-symbols-outlined {
   color: rgb(0 0 0 / 0.33);
 }
+button .material-symbols-outlined {
+  color: currentColor;
+  font-variation-settings: 'wght' 300;
+}
 
 
 
@@ -219,6 +223,15 @@
 
 
 @layer each {
+  button.link {
+    color: var(--accent);
+    background-color: transparent;
+    border: none;
+    font-size: calc(1em - 1px);
+    font-weight: 400;
+    text-decoration: underline;
+  }
+
   .two-grid {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -232,8 +245,10 @@
     background-color: transparent;
     font-size: smaller;
     box-shadow: 0px 2px 7px rgb(from var(--main-color) r g b / 0.66);
-    margin-block: 0.5rem 0;
-    margin-inline-end: 0.25rem;
+    /* margin-block: 0.5rem 0; */
+    /* margin-inline-end: 0.25rem; */
+    display: inline-flex;
+    align-items: center;
   
     &.add {--main-color: lightcoral;}
     &.target, &:active {

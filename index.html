@@ -8,7 +8,7 @@
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300..700" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=info,settings" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300..400,0,0&icon_names=info,upload_file" />
 
   <link rel="stylesheet" href="../__utility/style.css" />
   <link rel="stylesheet" href="style.css" />
@@ -23,14 +23,17 @@
         <div>
           <h1>出目集計ツール</h1>
           <div style="padding-inline: 2.5rem;padding-block-end: 1.5rem;">
-            <div style="margin-block: 1.5rem;">
+            <div style="margin-block: 1.5rem;display: flex;gap: 6px;">
               <button class="file-button"
                 @click="$event.currentTarget.nextElementSibling.click()"
                 @dragenter="$event.currentTarget.classList.add('target')"
                 @dragleave="$event.currentTarget.classList.remove('target')"
                 @dragover.prevent
                 @drop.prevent="dropHtmlFile($event, false)"
-              >ログを選択</button>
+              >
+                <span class="material-symbols-outlined">upload_file</span>
+                ログを選択
+              </button>
               <input type="file" accept="text/html" multiple @change="readHtmlFile($event, false)">
     
               <button class="file-button add"
@@ -42,7 +45,10 @@
               >追加</button>
               <input type="file" accept="text/html" multiple @change="readHtmlFile($event, true)">
 
-              <button class="file-button add" @click="chatArr.splice(0)">クリア</button>
+              <button class="file-button add" style="gap: 4px;" @click="chatArr.splice(0)">
+                <div class="icon icon-close" style="color: currentColor;"></div>
+                クリア
+              </button>
             </div>
 
             <h2>SYSTEM</h2>
@@ -73,8 +79,8 @@
               ></toggle-button>
             </div>
             
-            <h2 v-if="isCoC && setting.show.diceLog">GROWTH</h2>
-            <div v-if="isCoC && setting.show.diceLog" class="two-grid" style="grid-template-columns: repeat(2, auto 1fr);">
+            <h2 v-show="isCoC && setting.show.diceLog">GROWTH</h2>
+            <div v-show="isCoC && setting.show.diceLog" class="two-grid" style="grid-template-columns: repeat(2, auto 1fr);">
               Critical
               <label class="toggle-button">
                 <input type="checkbox" value="C" v-model="setting.growTarget">
@@ -117,7 +123,7 @@
                 <span class="slider"></span>
               </label>
             </div>
-            <multi-select v-if="isCoC && setting.show.diceLog && setting.growTarget.includes('E')"
+            <multi-select v-show="isCoC && setting.show.diceLog && setting.growTarget.includes('E')"
               select-id="multi-select" 
               :options="skillSet" 
               :picker-style="{positionArea:'top span-right'}" 
@@ -126,12 +132,11 @@
             ></multi-select>
 
             <h2>ELSE</h2>
-            <div style="display: flex;gap: 0.5rem;">
-              <button style="display: flex;align-items: center;" command="show-modal" commandfor="setting-modal">
-                <span class="material-symbols-outlined">settings</span>
-                設定
+            <div style="display: flex;flex-direction: column;">
+              <button class="link" command="show-modal" commandfor="setting-modal">
+                集計設定
               </button>
-              <button style="display: flex;align-items: center;" command="show-modal" commandfor="log-modal">
+              <button class="link" command="show-modal" commandfor="log-modal">
                 ログ編集
               </button>
             </div>
