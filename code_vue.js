@@ -76,7 +76,6 @@ const rootApp = createApp({
       return;
 
       function normStr(str) {
-        // const replaceArr = [['　',' '],['&lt;', '<'],['&gt;', '>'], ['&amp;', '&'], ['&quot;', '"'], ['&#x27;', '\''], ['&#x60;', '`'], ['<br>', '\n'], ['\t','  ']];
         let string = [
           ['　',' '],
           ['&lt;', '<'],
@@ -89,7 +88,6 @@ const rootApp = createApp({
           ['\t','  '],
           [/[！-｝]/g, function(s){return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)}],
         ].reduce((ac,cur) => ac = ac.replaceAll(cur[0], cur[1]), str);
-        // string = string.replace(/[！-｝]/g, function(s){return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);});
         return string;
       }
     }
@@ -264,12 +262,9 @@ const rootApp = createApp({
         // Critial
         const cArr = targetRoll.filter(dic => {
           switch(setting.value.totalStyle) {
-            case 'log':
-              return dic.CF==='C';
-            case 'cc':
-              return dic.diceVal<2;
-            case 'ccb':
-              return dic.diceVal<6;
+            case 'log': return dic.CF==='C';
+            case 'cc' : return dic.diceVal<2;
+            case 'ccb': return dic.diceVal<6;
           }
         });
         totalData.set('Critical', cArr.length);
@@ -281,12 +276,9 @@ const rootApp = createApp({
         // Fumble
         const fArr = targetRoll.filter(dic => {
           switch(setting.value.totalStyle) {
-            case 'log':
-              return dic.CF==='F';
-            case 'cc':
-              return dic.diceVal>99;
-            case 'ccb':
-              return dic.diceVal>95;
+            case 'log': return dic.CF==='F';
+            case 'cc' : return dic.diceVal>99;
+            case 'ccb': return dic.diceVal>95;
           }
         });
         totalData.set('Fumble', fArr.length);
