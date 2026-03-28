@@ -1,5 +1,4 @@
-
-@layer default, each, event;
+@layer base, component, state;
 
 :root {
   --accent : cadetblue;
@@ -18,7 +17,7 @@ button .material-symbols-outlined {
 
 
 
-@layer default {
+@layer base {
   body {
     margin:0;
     font-family: var(--basic-font);
@@ -114,7 +113,7 @@ button .material-symbols-outlined {
 }
 
 
-@layer default {
+@layer base {
   .multi-select {font-size: calc(1em - 2px);}
 
   .icon-frame {
@@ -149,7 +148,7 @@ button .material-symbols-outlined {
 }
 
 
-@layer each {
+@layer component {
   aside h2 {
     color: var(--accent);
     padding-block: 0.5rem;
@@ -222,7 +221,7 @@ button .material-symbols-outlined {
 }
 
 
-@layer each {
+@layer component {
   button.link {
     color: var(--accent);
     background-color: transparent;
@@ -343,7 +342,7 @@ button .material-symbols-outlined {
 
 /* --------------------------- */
 /*         Result Card         */
-@layer each {
+@layer component {
   .each-result {
     border-radius: 2rem;
     corner-shape: squircle;
@@ -445,7 +444,7 @@ button .material-symbols-outlined {
 
 /* --------------------------- */
 /*            modal            */
-@layer default {
+@layer base {
   .modal {
     background-color: #fafafa;
     border: 1px solid darkgray;
