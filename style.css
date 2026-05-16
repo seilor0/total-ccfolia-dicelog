@@ -1,7 +1,11 @@
 @layer base, component, state;
 
 :root {
-  --accent : cadetblue;
+  --blue: #326cc2;
+  --light-blue: #a3b7e0;
+  --offwhite: #fafafa;
+  --accent : var(--blue);
+
   --basic-font : 'Quicksand','Zen Kaku Gothic New';
   accent-color : var(--accent);
   scrollbar-gutter: stable;
@@ -18,52 +22,38 @@ button .material-symbols-outlined {
 
 
 @layer base {
+  html {height: 100%;}
+
   body {
     margin:0;
+    height: 100%;
     font-family: var(--basic-font);
   }
   
   #root {
     background-color: #fafafa;
-    min-height: 100dvh;
-    display: grid;
-    grid-template-rows:1fr auto;
+    min-height: stretch;
+    min-width: stretch;
+    width: fit-content;
+    display: flex;
   }
 
   #result {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min-content, 29rem));
+    grid-template-columns: repeat(auto-fit, 29rem);
     justify-content: center;
     gap: 1.5rem 5rem;
   }
 
   main {
-    display: grid;
-    grid-template-columns: auto 1fr;
-  }
-
-  aside {
-    width: 21rem;
-    white-space: nowrap;
-    user-select: none;
-    box-shadow: 0px 0px 15px rgb(0 0 0 / 0.33);
-    > div {
-      height: max-content;
-      position: sticky;
-      top: 0;
-    }
+    display: flex;
+    flex-grow: 1;
   }
 
   h1 {
-    font-size: 1.2rem;
-    font-weight: 500;
-    letter-spacing: 1ch;
     text-align: center;
-    color: #fafafa;
-    background-color: darkcyan;
-  
-    padding-block: 0.75rem;
-    margin-block: 0;
+    user-select: none;
+    font-weight: 100;
   }
   
   h2 {
@@ -97,13 +87,12 @@ button .material-symbols-outlined {
   }
 
   footer {
-    color: gray;
-    background-color: #eee;
-    border-block-start: 1px solid lightgray;
+    color: #6a7787;
+    background: linear-gradient(150deg,#e7ecef 40%, #cee8ed 100%);
+    border-block-start: 1px solid darkgray;
     font-size: 0.75rem;
     font-weight: 400;
     padding: 1rem 1.5rem;
-    margin:0;
   
     p {
       margin: 0;
@@ -113,6 +102,7 @@ button .material-symbols-outlined {
 }
 
 
+/* from __utility */
 @layer base {
   .multi-select {font-size: calc(1em - 2px);}
 
@@ -147,15 +137,80 @@ button .material-symbols-outlined {
   }
 }
 
+/* layout */
+@layer component {
+  .side-menu {
+    border-inline-end: 1px solid darkgray;
+    box-shadow: 2px -4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .side-menu-content {
+    padding: 1.5rem 2.5rem;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    white-space: nowrap;
+  
+    position: sticky;
+    top: 0;
+    width: 16rem;
+    height: max-content;
+
+    button.round {
+      width: 75%;
+      white-space: nowrap;
+    }
+  }
+}
 
 @layer component {
-  aside h2 {
-    color: var(--accent);
-    padding-block: 0.5rem;
-    margin-block-end: 0.5rem;
-    border-block-end: 1px solid darkgray;
+  .round {
+    color: var(--blue);
+    background: var(--offwhite);
+    border: 1px solid var(--light-blue);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-height: 2.5rem;
+    min-width: fit-content;
+    border-radius: 2.5rem;
+    font-weight: 600;
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+
+    &:hover {text-decoration: underline;}
+    &:active, 
+    &.blue {
+      color: white;
+      background: linear-gradient(90deg, #1a5bbd 60%, #1089d3 100%);
+      border-color: white;
+    }
+    &.blue:active {
+      color: var(--blue);
+      background: var(--offwhite);
+      border-color: var(--light-blue);
+    }
   }
 
+  .title {
+    color: darkslategray;
+    background: linear-gradient(150deg, #e7ecef 40%, #cee8ed 100%);
+    border-radius: 5rem;
+    margin-block: 0;
+    margin-inline-start: -0.5rem;
+    padding: 4px 0.75rem;
+    width: max-content;
+    font-weight: 500;
+}
+}
+
+/* footer */
+@layer component {
   footer h2 {
     font-weight: 600;
     font-size: larger;
@@ -192,32 +247,6 @@ button .material-symbols-outlined {
       &:nth-child(2){width: 20%}
     }
   }
-
-  main table {
-    --main-color: lightslategray;
-    --color: hsl(from var(--main-color) h s calc(l - 20));
-  
-    font-size: calc(1rem - 2px);
-    color: var(--color);
-  
-    thead {white-space: nowrap;}
-  
-    th,td {
-      font-weight: 500;
-      padding: 0.25rem;
-    }
-  
-    small {
-      color: var(--color);
-      opacity: 0.6;
-      padding-inline-start: 0.5ch;
-    }
-    
-    .C {color: #00b3ee;}
-    .F {color: #ff4c4c;}
-    .S {color: rgb(from var(--color) r g b / 0.5);}
-    .small {font-size: small;}
-  }
 }
 
 
@@ -234,27 +263,8 @@ button .material-symbols-outlined {
   .two-grid {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 0.5rem 1rem;
+    gap: 0.5rem;
     align-items: center;
-  }
-
-  .file-button {
-    --main-color: var(--accent);
-    color: var(--main-color);
-    background-color: transparent;
-    font-size: smaller;
-    box-shadow: 0px 2px 7px rgb(from var(--main-color) r g b / 0.66);
-    /* margin-block: 0.5rem 0; */
-    /* margin-inline-end: 0.25rem; */
-    display: inline-flex;
-    align-items: center;
-  
-    &.add {--main-color: lightcoral;}
-    &.target, &:active {
-      color: white;
-      background-color: var(--main-color);
-      border-color: var(--main-color);
-    }
   }
 
   .tips {
@@ -344,6 +354,7 @@ button .material-symbols-outlined {
 /*         Result Card         */
 @layer component {
   .each-result {
+    width: 29rem;
     border-radius: 2rem;
     corner-shape: squircle;
     border: 1px solid white;
@@ -351,8 +362,8 @@ button .material-symbols-outlined {
     background-color: rgb(255 255 255 / 0.5);
     
     h3 {
-      color: #666;
-      background-color: rgb(119 136 153 / 0.2);
+      color: darksla;
+      background: linear-gradient(150deg, #e7ecef 40%, #cee8ed 100%);
       font-weight: 400;
       font-size: 1.375rem;
       line-height: 1.5;
@@ -362,21 +373,47 @@ button .material-symbols-outlined {
       corner-shape: squircle;
     }
   
-    .select-tag-wrapper {margin-block: 0.5rem 1rem;}
-    
-    &.all {
-      grid-column: 1 / -1;
-      min-width: min-content;
-      max-width: 29rem;
-      h3 {
-        color: white;
-        background-color: rgb(95 158 160 / 0.8);
-        font-size: 1.8rem;
-      }
+    .select-tag-wrapper {margin-block: 0.5rem 1rem;} 
+  }
+  .each-result.all {
+    grid-column: 1 / -1;
+    min-width: min-content;
+    max-width: 29rem;
+    h3 {
+      color: white;
+      background: linear-gradient(90deg, #1a5bbd 60%, #1089d3 100%);
+      font-size: 1.8rem;
     }
   }
 
   .each-result-content {padding: 1rem;}
+  
+  .dice-total-table,
+  .dice-log-table {
+    --main-color: lightslategray;
+    --color: hsl(from var(--main-color) h s calc(l - 20));
+  
+    font-size: calc(1rem - 2px);
+    color: var(--color);
+  
+    thead {white-space: nowrap;}
+  
+    th,td {
+      font-weight: 500;
+      padding: 0.25rem;
+    }
+  
+    small {
+      color: var(--color);
+      opacity: 0.6;
+      padding-inline-start: 0.5ch;
+    }
+    
+    .C {color: #00b3ee;}
+    .F {color: #ff4c4c;}
+    .S {color: rgb(from var(--color) r g b / 0.5);}
+    .small {font-size: small;}
+  }
 
   .dice-total-table {
     width: stretch;
