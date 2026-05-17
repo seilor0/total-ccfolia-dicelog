@@ -18,7 +18,7 @@ const rootApp = createApp({
 
   setup () {
     const system = ref('coc6th');
-    const isCoC = computed(()=>system.value.startsWith('coc'));
+    const isCoc = computed(()=>system.value.startsWith('coc'));
     const setting = ref({
       show: {selectTag: false, total: true, diceLog: false},
 
@@ -100,7 +100,7 @@ const rootApp = createApp({
       let id = 0;
       const resultArr  = [];
 
-      const dicePat = isCoC.value ? / > (?<diceVal>\d+)\D* > / : / > \[(?<diceVal>[\d, ]+)\] > [-\d]/;
+      const dicePat = isCoc.value ? / > (?<diceVal>\d+)\D* > / : / > \[(?<diceVal>[\d, ]+)\] > [-\d]/;
       const replaceArr = [
         [/[【】「」『』《》〈〉〔〕\[\]]/g, ''],
         [/[<≪](.*?)[>≫]/g, '$1'],
@@ -110,25 +110,25 @@ const rootApp = createApp({
         [')', '）'],
         ['!', '！'],
         ['?', '？']
-      ].concat(isCoC.value ? [['*',' × ']] : []);
+      ].concat(isCoc.value ? [['*',' × ']] : []);
 
       chatArr.value
-      .filter(rollData => (isCoC.value ? /.\(1d100<=/is : /DA.+\(\d+DA|<=.+\(\d+DM<=/is).test(rollData.log))
+      .filter(rollData => (isCoc.value ? /.\(1d100<=/is : /DA.+\(\d+DA|<=.+\(\d+DM<=/is).test(rollData.log))
       .forEach(rollData => {
         // rollNo, タブ, キャラクター, ログ
-        const rollData = isCoC.value ? 
+        const rollData = isCoc.value ? 
           new CocRollData({rollNo:id++, ...rollData}) : 
           new EmokloreRollData({rollNo:id++, ...rollData});
 
         // 出目
         let {diceVal} = rollData.log.match(dicePat).groups;
         if (!diceVal) return;
-        diceVal = isCoC.value ? parseInt(diceVal) : diceVal.split(',').map(e=>parseInt(e));
+        diceVal = isCoc.value ? parseInt(diceVal) : diceVal.split(',').map(e=>parseInt(e));
         rollData.diceVal = diceVal;
 
         // 技能名
         let skillPat;
-        if (isCoC.value) {
+        if (isCoc.value) {
           skillPat = /CBR|RES/i.test(rollData.log) ?
             /\d+\) (?<skill>.*)\(1d100<=/si :
             /<=.+? (?<skill>.*)\(1d100<=/si;
@@ -215,7 +215,7 @@ const rootApp = createApp({
 
 
     const diceLogHead = computed(() => {
-      if (isCoC.value) {
+      if (isCoc.value) {
         if (setting.value.showStyle==='log') return ['タブ', 'ログ', null];
         else return ['タブ', '技能', '判定値', '出目', null];
       } else {
@@ -257,7 +257,7 @@ const rootApp = createApp({
       // ロール数
       totalData.set('ロール', targetRoll.length);
 
-      if (isCoC.value) {
+      if (isCoc.value) {
         // 出目平均
         const average = floatRound(targetRoll.reduce((ac,cur)=>ac+cur.diceVal, 0) / targetRoll.length, 2) || null;
         totalData.set('出目平均', average);
@@ -353,7 +353,7 @@ const rootApp = createApp({
       else if (setting.value.sortStyle==='rollNo') diceLogBaseArr.sort((a,b) => a.rollNo - b.rollNo);
 
       const diceLogArr = diceLogBaseArr.map(rollData=>{
-        if (isCoC.value) {
+        if (isCoc.value) {
           if (setting.value.showStyle==='log') return [rollData.tab, rollData.log, rollData.CF];
           else return [rollData.tab, rollData.skill, rollData.threshold, rollData.diceVal, rollData.CF];
         } else {
@@ -407,7 +407,7 @@ const rootApp = createApp({
 
     return {
       system,
-      isCoC,
+      isCoc,
       setting,
       initSkills,
 

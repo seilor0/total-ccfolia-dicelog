@@ -7,7 +7,7 @@ export default {
     diceLogHead: Array,
     resultData: Object,
 
-    isCoC: Boolean,
+    isCoc: Boolean,
     setting: Object,
     allCharacters: Map,
     selectedCharacters: Set,
@@ -15,7 +15,7 @@ export default {
   emits: ['change-target-characters'],
   setup (props, {emit}) {
     function totalCellStyle (key) {
-      if (props.isCoC) {
+      if (props.isCoc) {
         return {'C':key==='Critical', 'F':key==='Fumble',}
       } else {
         return {'C':key==='C', 'F':key==='E', 'S':key==='→期待値'}
@@ -24,7 +24,7 @@ export default {
 
     function diceLogCellStyle (content, index) {
       const head = props.diceLogHead[index];
-      if (props.isCoC) {        
+      if (props.isCoc) {        
         if (head===null)
           return {'C':content?.includes('C'), 'F':content?.includes('F'), 'S':/S|Ex/.test(content)};
         else if (head==='ログ') return {small:true};
@@ -83,7 +83,7 @@ export default {
       <table v-show="setting.show.total" class="dice-total-table">
         <thead>
           <tr>
-            <td v-for="key in resultData.totalData.keys()" :class="{'S':!isCoC && key==='→期待値'}">
+            <td v-for="key in resultData.totalData.keys()" :class="{'S':!isCoc && key==='→期待値'}">
               {{key}}
             </td>
           </tr>
@@ -106,10 +106,10 @@ export default {
       </table>
   
       <table v-if="character!=='ALL'" v-show="setting.show.diceLog && resultData.diceLog.length" class="dice-log-table">
-        <caption>{{isCoC ? '成長対象' : 'DICE LOG'}}</caption>
+        <caption>{{isCoc ? '成長対象' : 'DICE LOG'}}</caption>
         <thead>
           <tr>
-            <td v-for="head in diceLogHead" :class="{'S':!isCoC && head==='→期待値'}">{{head}}</td>
+            <td v-for="head in diceLogHead" :class="{'S':!isCoc && head==='→期待値'}">{{head}}</td>
           </tr>
         </thead>
         <tbody>
