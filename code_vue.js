@@ -113,15 +113,15 @@ const rootApp = createApp({
       ].concat(isCoc.value ? [['*',' × ']] : []);
 
       chatArr.value
-      .filter(rollData => (isCoc.value ? /.\(1d100<=/is : /DA.+\(\d+DA|<=.+\(\d+DM<=/is).test(rollData.log))
-      .forEach(rollData => {
+      .filter(chatData => (isCoc.value ? /.\(1d100<=/is : /DA.+\(\d+DA|<=.+\(\d+DM<=/is).test(chatData.log))
+      .forEach(chatData => {
         // rollNo, タブ, キャラクター, ログ
         const rollData = isCoc.value ? 
-          new CocRollData({rollNo:id++, ...rollData}) : 
-          new EmokloreRollData({rollNo:id++, ...rollData});
+          new CocRollData({rollNo:id++, ...chatData}) : 
+          new EmokloreRollData({rollNo:id++, ...chatData});
 
         // 出目
-        let {diceVal} = rollData.log.match(dicePat).groups;
+        let {diceVal} = chatData.log.match(dicePat).groups;
         if (!diceVal) return;
         diceVal = isCoc.value ? parseInt(diceVal) : diceVal.split(',').map(e=>parseInt(e));
         rollData.diceVal = diceVal;
@@ -129,16 +129,16 @@ const rootApp = createApp({
         // 技能名
         let skillPat;
         if (isCoc.value) {
-          skillPat = /CBR|RES/i.test(rollData.log) ?
+          skillPat = /CBR|RES/i.test(chatData.log) ?
             /\d+\) (?<skill>.*)\(1d100<=/si :
             /<=.+? (?<skill>.*)\(1d100<=/si;
         } else {
-          skillPat = /\d+DA\d+/i.test(rollData.log) ?
+          skillPat = /\d+DA\d+/i.test(chatData.log) ?
             /DA.+? (?<skill>.*)\(\d+DA\d+\)/si :
             /<=.+? (?<skill>.*)\(\d+DM<=\d+\)/si;
         }
 
-        const {skill} = rollData.log.match(skillPat)?.groups ?? {skill:''};
+        const {skill} = chatData.log.match(skillPat)?.groups ?? {skill:''};
         rollData.skill = replaceArr
           .reduce((ac, cur)=>ac=ac.replaceAll(cur[0],cur[1]), skill)
           .trim();
@@ -146,30 +146,30 @@ const rootApp = createApp({
         // 判定値・C/F
         if (system.value==='coc6th') {
           // 組み合わせロール
-          if (/ > \d+\[.+,.+\] > /.test(rollData.log)) {
-            rollData.threshold = Math.min(...rollData.log.match(/<=([\d,]+)\) > /)[1].split(','));
-            const text = rollData.log.match(/ > \d+\[(.+,.+)\] > /)[1];
+          if (/ > \d+\[.+,.+\] > /.test(chatData.log)) {
+            rollData.threshold = Math.min(...chatData.log.match(/<=([\d,]+)\) > /)[1].split(','));
+            const text = chatData.log.match(/ > \d+\[(.+,.+)\] > /)[1];
             rollData.CF =
               text.includes('決定的成功') ? 'C' :
               text.includes('スペシャル') ? 'S' :
               text.includes('致命的失敗') ? 'F' : null;
           } else {
-            rollData.threshold = parseInt(rollData.log.match(/\(1d100<=([-\d]+)\).* > /i)[1]);
+            rollData.threshold = parseInt(chatData.log.match(/\(1d100<=([-\d]+)\).* > /i)[1]);
             rollData.CF =
-              /決定的成功(\/スペシャル)?$/.test(rollData.log) ? 'C' :
-              rollData.log.endsWith('スペシャル') ? 'S' :
-              rollData.log.endsWith('致命的失敗') ? 'F' : null;
+              /決定的成功(\/スペシャル)?$/.test(chatData.log) ? 'C' :
+              chatData.log.endsWith('スペシャル') ? 'S' :
+              chatData.log.endsWith('致命的失敗') ? 'F' : null;
           }
 
         } else if (system.value==='coc7th') {
-          rollData.threshold = parseInt(rollData.log.match(/\(1d100<=([-\d]+)\).* > /i)[1]);
+          rollData.threshold = parseInt(chatData.log.match(/\(1d100<=([-\d]+)\).* > /i)[1]);
           rollData.CF =
-            rollData.log.endsWith('クリティカル') ? 'C' :
-            rollData.log.endsWith('イクストリーム成功') ? 'Ex' :
-            rollData.log.endsWith('ファンブル') ? 'F' : null;
+            chatData.log.endsWith('クリティカル') ? 'C' :
+            chatData.log.endsWith('イクストリーム成功') ? 'Ex' :
+            chatData.log.endsWith('ファンブル') ? 'F' : null;
 
         } else if (system.value==='emoklore') {
-          rollData.threshold = parseInt(rollData.log.match(/\(\d+DM<=(\d+)\) > \[[\d, ]+\]/i)[1]);
+          rollData.threshold = parseInt(chatData.log.match(/\(\d+DM<=(\d+)\) > \[[\d, ]+\]/i)[1]);
         }
 
         resultArr.push(rollData);
