@@ -1,0 +1,13 @@
+{
+  "show": {
+    "selectTag": false, 
+    "total": true, 
+    "diceLog": false
+  },
+  "mergeDupUnit": true,
+  "totalStyle": "log",
+  "sortStyle": "growth",
+  "showStyle": "list",
+  "growTarget": ["C","F","I"],
+  "selectedSkills": []
+}

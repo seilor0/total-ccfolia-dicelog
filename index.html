@@ -65,7 +65,7 @@
                 :is-checked="setting.show.total" @checked-toggle="val=>setting.show.total=val"
               ></toggle-button>
               
-              {{isCoC ? '成長ログ' : 'ダイスログ'}}
+              {{isCoc ? '成長ログ' : 'ダイスログ'}}
               <toggle-button :top-is-slider="true"
                 :is-checked="setting.show.diceLog" @checked-toggle="val=>setting.show.diceLog=val"
               ></toggle-button>
@@ -73,8 +73,8 @@
           </div>
 
           <div style="display: flex;gap: 0.5rem;align-items: flex-start;width: stretch;">
-            <span v-if="isCoC && setting.show.diceLog" class="title" style="align-self: start;">GROWTH</span>
-            <div v-if="isCoC && setting.show.diceLog" class="two-grid" style="width: stretch;">
+            <span v-if="isCoc && setting.show.diceLog" class="title" style="align-self: start;">GROWTH</span>
+            <div v-if="isCoc && setting.show.diceLog" class="two-grid" style="width: stretch;">
               Critical
               <label class="toggle-button">
                 <input type="checkbox" value="C" v-model="setting.growTarget">
@@ -117,7 +117,7 @@
                 <span class="slider"></span>
               </label>
 
-              <multi-select v-show="isCoC && setting.show.diceLog && setting.growTarget.includes('E')"
+              <multi-select v-show="isCoc && setting.show.diceLog && setting.growTarget.includes('E')"
                 select-id="multi-select" 
                 :options="skillSet" 
                 :picker-style="{positionArea:'top span-right'}" 
@@ -132,12 +132,12 @@
       </aside>
 
       <div style="display: flex;flex-direction: column;flex-grow: 1;">
-        <div style="padding: 2.5rem 4rem;flex-grow: 1;display: grid;grid-template-columns: repeat(auto-fit, 29rem);justify-content: center;gap: 1.5rem 5rem;">
+        <div style="padding: 2.5rem 4rem;flex-grow: 1;display: grid;grid-template-columns: repeat(auto-fit, minmax(min-content, 29rem));justify-content: center;gap: 1.5rem 5rem;">
           <result-card v-if="chatArr.length" key="ALL" class="all"
             character="ALL"
             :dice-log-head="diceLogHead"
             :result-data="allResultData"
-            :is-co-c="isCoC"
+            :is-coc="isCoc"
             :setting="setting"
           ></result-card>
           <result-card v-for="[character, resultData] in resultDataMap" :key="character"
@@ -145,7 +145,7 @@
             :character="character"
             :dice-log-head="diceLogHead"
             :result-data="resultData"
-            :is-co-c="isCoC"
+            :is-coc="isCoc"
             :setting="setting"
             :all-characters="nameUnifiedMap"
             :selected-characters="nameUnifiedMap.get(character).characters"
@@ -242,7 +242,7 @@
             text-checked="まとめる" text-not-checked="分ける"
           ></toggle-button>
 
-          <template v-if="isCoC">
+          <template v-if="isCoc">
             ダイス
             <select v-model="setting.totalStyle">
               <option value="cc">CC</option>
@@ -251,7 +251,7 @@
             </select>
           </template>
 
-          <template v-if="isCoC && setting.show.diceLog">
+          <template v-if="isCoc && setting.show.diceLog">
             並び替え
             <select v-model="setting.sortStyle">
               <option value="growth">C / F</option>
