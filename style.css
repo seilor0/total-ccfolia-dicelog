@@ -354,7 +354,7 @@ button .material-symbols-outlined {
     background-color: rgb(255 255 255 / 0.5);
     
     h3 {
-      color: darksla;
+      color: darkslategray;
       background: linear-gradient(150deg, #e7ecef 40%, #cee8ed 100%);
       font-weight: 400;
       font-size: 1.375rem;
