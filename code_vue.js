@@ -400,11 +400,14 @@ const rootApp = createApp({
 
 
     onMounted(async () => {
-      const json = await fetch('./setting.json').then(res=>res.json());
-      initSkills.value.coc6th = new Map(json.coc6th);
-      initSkills.value.coc7th = new Map(json.coc7th);
+      setting.value = await fetch('./data/setting.json').then(res=>res.json());
 
-      document.querySelector('footer table tbody').innerHTML = json.changeLog
+      const initSkillJson = await fetch('./data/init-skills.json').then(res=>res.json());
+      initSkills.value.coc6th = new Map(initSkillJson.coc6th);
+      initSkills.value.coc7th = new Map(initSkillJson.coc7th);
+
+      const changeLogJson = await fetch('./data/change-log.json').then(res=>res.json());
+      document.querySelector('footer table tbody').innerHTML = changeLogJson
       .reduce((acc, cur) => acc += `<tr><td>${cur.date}</td><td>${cur.version}</td><td>${cur.detail}</td></tr>`, '');
     });
 
