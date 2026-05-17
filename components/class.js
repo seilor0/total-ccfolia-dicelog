@@ -8,10 +8,7 @@ export class ChatData {
     this.name = name;
     this.log = log;
   }
-  get nameNodup() {
-    // console.log()
-    return this.name.replace(/ *\(\d+\)$/,'');
-  }
+  get nameNodup() {return this.name.replace(/ *\(\d+\)$/,'');}
   clone() {
     return new ChatData({
       tab: this.tab,
