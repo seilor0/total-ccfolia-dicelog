@@ -71,8 +71,8 @@ export default {
     <h3>{{character}}</h3>
     <div class="result-card__content">
 
-      <div v-if="character!=='ALL'" v-show="setting.show.selectTag" class="flag-tag-wrapper">
-        <label v-for="name in allCharacters.keys()" class="flag-tag" 
+      <div v-if="character!=='ALL'" v-show="setting.show.selectTag" class="tag-wrapper">
+        <label v-for="name in allCharacters.keys()" class="button-tag round" 
           v-show="allCharacters.get(name).show || selectedCharacters.has(name)"
         >
           <input type="checkbox" :value="name" :checked="selectedCharacters.has(name)" @change="emitChangeTargetEvent($event, character)">

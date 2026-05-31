@@ -10,8 +10,12 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300..700" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300..400,0,0&icon_names=edit,info,upload_file" />
 
-  <link rel="stylesheet" href="../__utility/css/__style.css" />
+  <link rel="stylesheet" href="./css/_base.css" />
+  <link rel="stylesheet" href="./css/basic-dialog.css" />
+  <link rel="stylesheet" href="./css/css-icon.css" />
   <link rel="stylesheet" href="./css/multi-select.css" />
+  <link rel="stylesheet" href="./css/result-card.css" />
+  <link rel="stylesheet" href="./css/toggle-button.css" />
   <link rel="stylesheet" href="./css/__style.css" />
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -33,14 +37,12 @@
             @drop.prevent="dropHtmlFile($event, true)"
           >
             <google-icon>upload_file</google-icon>
-            <!-- <span class="material-symbols-outlined">upload_file</span> -->
             ログを追加
           </button>
           <input type="file" accept="text/html" multiple @change="readHtmlFile($event, true)">
 
-          <button class="round-button invert-el" command="show-modal" commandfor="log-modal">
+          <button class="round-button invert-el" command="show-modal" commandfor="log-dialog">
             <google-icon>edit</google-icon>
-            <!-- <span class="material-symbols-outlined">edit</span> -->
             ログを編集
           </button>
 
@@ -59,18 +61,15 @@
             <span class="title">DISPLAY</span>
             <div class="two-grid">
               キャラ選択
-              <toggle-button :top-is-slider="true"
-                :is-checked="setting.show.selectTag" @checked-toggle="val=>setting.show.selectTag=val"
+              <toggle-button :is-checked="setting.show.selectTag" @checked-toggle="val=>setting.show.selectTag=val"
               ></toggle-button>
               
               集計結果
-              <toggle-button :top-is-slider="true"
-                :is-checked="setting.show.total" @checked-toggle="val=>setting.show.total=val"
+              <toggle-button :is-checked="setting.show.total" @checked-toggle="val=>setting.show.total=val"
               ></toggle-button>
               
               {{isCoc ? '成長ログ' : 'ダイスログ'}}
-              <toggle-button :top-is-slider="true"
-                :is-checked="setting.show.diceLog" @checked-toggle="val=>setting.show.diceLog=val"
+              <toggle-button :is-checked="setting.show.diceLog" @checked-toggle="val=>setting.show.diceLog=val"
               ></toggle-button>
             </div>
           </div>
@@ -81,26 +80,25 @@
               Critical
               <label class="toggle-button">
                 <input type="checkbox" value="C" v-model="setting.growTarget">
-                <span class="slider"></span>
+                <span class="toggle-button__slider"></span>
               </label>
   
               Fumble
               <label class="toggle-button">
                 <input type="checkbox" value="F" v-model="setting.growTarget">
-                <span class="slider"></span>
+                <span class="toggle-button__slider"></span>
               </label>
   
               {{system==='coc6th' ? 'Special' : 'Extreme'}}
               <label class="toggle-button">
                 <input type="checkbox" value="S" v-model="setting.growTarget">
-                <span class="slider"></span>
+                <span class="toggle-button__slider"></span>
               </label>
   
               <span>
                 初期値
                 <div class="tips">
                   <google-icon style="font-size: 20px;">info</google-icon>
-                  <!-- <span class="material-symbols-outlined" style="font-size: 20px;">info</span> -->
                   <div>
                     <ul>
                       <li class="ng">回避</li>
@@ -112,13 +110,13 @@
               </span>
               <label class="toggle-button">
                 <input type="checkbox" value="I" v-model="setting.growTarget">
-                <span class="slider"></span>
+                <span class="toggle-button__slider"></span>
               </label>
   
               指定技能
               <label class="toggle-button">
                 <input type="checkbox" value="E" v-model="setting.growTarget">
-                <span class="slider"></span>
+                <span class="toggle-button__slider"></span>
               </label>
 
               <multi-select v-show="isCoc && setting.show.diceLog && setting.growTarget.includes('E')"
@@ -131,7 +129,7 @@
             </div>
           </div>
           
-          <button class="link" command="show-modal" commandfor="setting-modal" style="margin-block-start: 2rem;">集計設定</button>
+          <button class="link" command="show-modal" commandfor="setting-dialog" style="margin-block-start: 2rem;">集計設定</button>
         </div>
       </aside>
 
@@ -214,15 +212,12 @@
       </div>
     </main>
 
-    <dialog class="modal" id="log-modal" closedby="any">
-      <header>
-        <div style="display: flex;gap: 8px;">
-          <h2>ログを編集</h2>
-          <button @click="deleteLog" style="user-select: none;">delete</button>
-        </div>
-        <button-css-icon icon-name="icon-close" command="close" commandfor="log-modal"></button-css-icon>
-      </header>
-      <section class="modal-body">
+    <basic-dialog id="log-dialog">
+      <template #header>
+        ログを編集
+        <button @click="deleteLog" class="invert-el invert" style="user-select: none;">delete</button>
+      </template>
+      <template #content>
         <div class="log-wrap" tabindex="-1" @keyup.delete="deleteLog">
           <div v-for="(chat, index) in chatArr" :data-index="index">
             <span>{{chat.tab}}</span>
@@ -230,21 +225,19 @@
             <p>{{chat.log}}</p>
           </div>
         </div>
-      </section>
-    </dialog>
-    
-    <dialog class="modal" id="setting-modal" closedby="any">
-      <header>
-        <h2>SETTING</h2>
-        <button-css-icon icon-name="icon-close" command="close" commandfor="setting-modal"></button-css-icon>
-      </header>
-      <section class="modal-body">
+      </template>
+    </basic-dialog>
+
+    <basic-dialog id="setting-dialog">
+      <template #header>SETTING</template>
+      <template #content>
         <div class="two-grid" style="align-items: start;">
           複製コマ
-          <toggle-button :top-is-slider="true"
-            :is-checked="setting.mergeDupUnit" @checked-toggle="val=>setting.mergeDupUnit=val"
-            text-checked="まとめる" text-not-checked="分ける"
-          ></toggle-button>
+          <toggle-button :top-is-slider="true" :is-checked="setting.mergeDupUnit" @checked-toggle="val=>setting.mergeDupUnit=val"
+          >
+            <template #checked>まとめる</template>
+            <template #not-checked>分ける</template>
+          </toggle-button>
 
           <template v-if="isCoc">
             ダイス
@@ -278,8 +271,8 @@
               <input type="checkbox" @change="tabMap.keys().forEach(key=>tabMap.set(key, $event.currentTarget.checked))" checked/>
               全てのタブ
             </label>
-            <div class="flag-tag-wrapper" style="max-width: 25dvw;">
-              <label v-for="[tab, flag] in tabMap" class="flag-tag">
+            <div class="tag-wrapper" style="max-width: 25dvw;">
+              <label v-for="[tab, flag] in tabMap" class="button-tag round">
                 <input type="checkbox" :value="tab" 
                   :checked="flag" @change="tabMap.set(tab, $event.currentTarget.checked)" />
                 {{tab}}
@@ -287,9 +280,8 @@
             </div>
           </div>
         </div>
-
-      </section>
-    </dialog>
+      </template>
+    </basic-dialog>
   </div>
   <script type="module" src="code_vue.js"></script>
 </body>

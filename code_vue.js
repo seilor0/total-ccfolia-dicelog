@@ -1,3 +1,4 @@
+import BasicDialog from "./components/basic-dialog.js";
 import ButtonCssIcon from "./components/button-css-icon.js";
 import GoogleIcon from "./components/google-icon.js";
 import MultiSelect from "./components/multi-select.js";
@@ -11,6 +12,7 @@ const {createApp, ref, computed, watch, onMounted, toRaw} = Vue;
 
 const rootApp = createApp({
   components: {
+    BasicDialog,
     ButtonCssIcon,
     GoogleIcon,
     MultiSelect,

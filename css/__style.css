@@ -17,30 +17,6 @@ button .material-symbols-outlined {
 }
 
 
-@layer layout {
-  /* html {height: 100%;} */
-
-  /* body {
-    margin:0;
-    height: 100%;
-    font-family: var(--basic-font);
-  } */
-  
-  /* #root {
-    background-color: #fafafa;
-    min-height: stretch;
-    min-width: stretch;
-    width: fit-content;
-    display: flex;
-  } */
-
-  /* main {
-    display: flex;
-    flex-grow: 1;
-  } */
-}
-
-
 @layer base {
   h1 {
     text-align: center;
@@ -98,6 +74,23 @@ button .material-symbols-outlined {
 /*  imported component  */
 /* -------------------- */
 @layer project {
+  .l-side-bar {
+    user-select: none;
+  }
+  .l-side-bar__content {
+    padding: 1.5rem 2.5rem;
+    gap: 1rem;
+    width: 16rem;
+
+    .round-button {
+      width: 75%;
+      white-space: nowrap;
+    }
+  }
+}
+
+
+@layer project {
   .icon-frame {
     border: 1px solid darkgray;
     border-radius: 3px;
@@ -113,27 +106,41 @@ button .material-symbols-outlined {
   .multi-select {
     font-size: calc(1em - 2px);
   }
+  
+  .invert-el {
+    --line-color: var(--light-blue);
+    --active-back-color: var(--blue-gradient);
+  }
 
-  .flag-tag {
-    --fill-color: gray;
-    font-size: 0.8rem;
-    .modal &       {--fill-color: lightcoral;}
-    .each-result & {--fill-color: lightblue;}
+  .button-tag {
+    --text-color: gray;
+    font-size: 0.8em;
+    .basic-dialog & {--text-color: hsl(from lightcoral h s calc(l - 7));}
+    .result-card &  {--text-color: hsl(from lightblue h s calc(l - 20));}
   }
   
   .toggle-button {
     --radius: calc(0.5rem - 1px);
     --padding: 2px;
-    --color: var(--accent);
-    gap: 0.5rem;
     font-weight: 500;
-  
     .checked {color: var(--accent);}
     .not-checked {color: rgb(0 0 0 / 0.4);}
   }
 
   .link {
     font-size: calc(1em - 1px);
+  }
+
+  .basic-dialog {
+    --radius: 4px;
+    header {
+      padding: 1rem;
+      padding-inline-start: 1.5rem;
+    }
+    section {
+      padding: 1rem 1.5rem;
+      p {margin: 0;}
+    }
   }
 }
 
@@ -142,51 +149,6 @@ button .material-symbols-outlined {
 /*  project component   */
 /* -------------------- */
 @layer component {
-  .l-side-bar {
-    user-select: none;
-  }
-  .l-side-bar__content {
-    padding: 1.5rem 2.5rem;
-    gap: 1rem;
-    width: 16rem;
-
-    button.round {
-      width: 75%;
-      white-space: nowrap;
-    }
-  }
-}
-
-@layer component {
-  .round {
-    color: var(--blue);
-    background: var(--off-white);
-    border: 1px solid var(--light-blue);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    min-height: 2.5rem;
-    min-width: fit-content;
-    border-radius: 2.5rem;
-    font-weight: 600;
-
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-
-    &:hover {text-decoration: underline;}
-    &:active, 
-    &.blue {
-      color: white;
-      background: var(--blue-gradient);
-      border-color: white;
-    }
-    &.blue:active {
-      color: var(--blue);
-      background: var(--off-white);
-      border-color: var(--light-blue);
-    }
-  }
-
   .title {
     color: darkslategray;
     background: linear-gradient(150deg, #e7ecef 40%, #cee8ed 100%);
@@ -308,7 +270,7 @@ button .material-symbols-outlined {
     }
   }
 
-  .flag-tag-wrapper {
+  .tag-wrapper {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -327,43 +289,3 @@ button .material-symbols-outlined {
     justify-content: center;
   }
 }
-
-/* --------------------------- */
-
-
-/* --------------------------- */
-/*            modal            */
-@layer base {
-  .modal {
-    background-color: #fafafa;
-    border: 1px solid darkgray;
-    border-radius: 4px;
-    overflow: hidden auto;
-    padding: 0;
-    scrollbar-color: #ccc transparent;
-    
-    max-height: 90%;
-    max-width: 50%;
-    min-width: 20rem;
-  
-    header {
-      padding: 1rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: hsl(0, 0%, 93%);
-      position: sticky;
-      top: 0;
-      h2 {
-        margin: 0;
-        user-select: none;
-      }
-    }
-  
-    section {
-      padding: 1rem 1.5rem;
-      p {margin: 0;}
-    }
-  }
-}
-/* --------------------------- */
