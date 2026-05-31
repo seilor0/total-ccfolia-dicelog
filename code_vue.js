@@ -1,6 +1,7 @@
-import ToggleButton from "./components/toggle-button.js";
 import ButtonCssIcon from "./components/button-css-icon.js";
+import GoogleIcon from "./components/google-icon.js";
 import MultiSelect from "./components/multi-select.js";
+import ToggleButton from "./components/toggle-button.js";
 import ResultCard from "./components/result-card.js";
 
 import {ChatData, CocRollData, EmokloreRollData} from './components/class.js'
@@ -10,9 +11,10 @@ const {createApp, ref, computed, watch, onMounted, toRaw} = Vue;
 
 const rootApp = createApp({
   components: {
-    ToggleButton,
     ButtonCssIcon,
+    GoogleIcon,
     MultiSelect,
+    ToggleButton,
     ResultCard,
   },
 

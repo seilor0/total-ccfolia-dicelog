@@ -1,0 +1,126 @@
+@layer component {
+  .result-card {
+    border-radius: 2rem;
+    corner-shape: squircle;
+    border: 1px solid white;
+    box-shadow: 0px 0px 10px 2px rgb(119 136 153 / 0.5);
+    background-color: rgb(255 255 255 / 0.5);
+    
+    h3 {
+      color: darkslategray;
+      background: linear-gradient(150deg, #e7ecef 40%, #cee8ed 100%);
+      font-weight: 400;
+      font-size: 1.375rem;
+      line-height: 1.5;
+      margin-block: 0;
+      padding: 0.5rem 1.5rem;
+      border-radius: calc(2rem - 1px) calc(2rem - 1px) 0 0;
+      corner-shape: squircle;
+    }
+  
+    .flag-tag-wrapper {margin-block: 0.5rem 1rem;} 
+  }
+
+  .result-card.all {
+    grid-column: 1 / -1;
+    min-width: min-content;
+    max-width: 29rem;
+    h3 {
+      color: white;
+      background: linear-gradient(90deg, #1a5bbd 60%, #1089d3 100%);
+      font-size: 1.8rem;
+    }
+  }
+
+  .result-card__content {padding: 1rem;}
+  
+  .dice-total-table,
+  .dice-log-table {
+    --main-color: lightslategray;
+    --color: hsl(from var(--main-color) h s calc(l - 20));
+  
+    font-size: calc(1rem - 2px);
+    color: var(--color);
+  
+    thead {white-space: nowrap;}
+  
+    th,td {
+      font-weight: 500;
+      padding: 0.25rem;
+    }
+  
+    small {
+      color: var(--color);
+      opacity: 0.6;
+      padding-inline-start: 0.5ch;
+    }
+    
+    .C {color: #00b3ee;}
+    .F {color: #ff4c4c;}
+    .S {color: rgb(from var(--color) r g b / 0.5);}
+    .small {font-size: small;}
+  }
+
+
+  .dice-total-table {
+    width: stretch;
+    border-collapse: collapse;
+  
+    thead {
+      border-block-end: 1px solid darkgray;
+    }
+    th,td {
+      padding: 0.5rem 0.75rem;
+      text-align: center;
+      vertical-align: baseline;
+      min-width: 4ch;
+    }
+    tbody td {
+      font-size: calc(1rem - 1px);
+    }
+  }
+  
+
+  .dice-log-table {
+    border-spacing: 0 0.25rem;
+    width: stretch;
+    
+    caption {
+      color: darkkhaki;
+      text-align: left;
+      font-size: calc(1rem - 1px);
+      font-weight: 500;
+    }
+    
+    th,td {
+      text-align: center;
+      border-block-end: 1px solid hsl(from var(--main-color) h calc(s - 13) calc(l + 27));
+    }
+    
+    tbody {
+      margin-block-start: 0.25rem;
+  
+      td:first-child {
+        font-size: smaller;
+        color: rgb(from var(--color) r g b /0.5);
+        width: 8ch;
+        max-width: 8ch;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }  
+      > :nth-of-type(odd) {
+        background-color: rgb(from var(--main-color) r g b /0.07);
+      }
+    }
+  
+    td:nth-child(2) {
+      text-align: left;
+    }
+  
+    td:nth-child(2) ~ * {
+      width:4ch;
+      white-space: nowrap;
+    }
+  }
+}

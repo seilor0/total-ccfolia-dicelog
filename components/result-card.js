@@ -67,12 +67,12 @@ export default {
     }
   },
   template: `
-  <div class="each-result">
+  <div class="result-card">
     <h3>{{character}}</h3>
-    <div class="each-result-content">
+    <div class="result-card__content">
 
-      <div v-if="character!=='ALL'" v-show="setting.show.selectTag" class="select-tag-wrapper">
-        <label v-for="name in allCharacters.keys()" class="select-tag" 
+      <div v-if="character!=='ALL'" v-show="setting.show.selectTag" class="flag-tag-wrapper">
+        <label v-for="name in allCharacters.keys()" class="flag-tag" 
           v-show="allCharacters.get(name).show || selectedCharacters.has(name)"
         >
           <input type="checkbox" :value="name" :checked="selectedCharacters.has(name)" @change="emitChangeTargetEvent($event, character)">
