@@ -17,6 +17,10 @@ button .material-symbols-outlined {
 }
 
 
+
+/* ---------------------- */
+/*     || base, reset     */
+/* ---------------------- */
 @layer base {
   h1 {
     text-align: center;
@@ -53,27 +57,15 @@ button .material-symbols-outlined {
     box-sizing: border-box;
     cursor: pointer;
   }
-
-  footer {
-    color: #6a7787;
-    background: var(--pale-green-gradient);
-    border-block-start: 1px solid darkgray;
-    font-size: 0.75rem;
-    font-weight: 400;
-    padding: 1rem 1.5rem;
-  
-    p {
-      margin: 0;
-      font-weight: unset;
-    }
-  }
 }
 
 
+
 /* -------------------- */
-/*  imported component  */
+/*       || layer       */
 /* -------------------- */
-@layer project {
+/* imported */
+@layer layout {
   .l-side-bar {
     user-select: none;
   }
@@ -87,22 +79,21 @@ button .material-symbols-outlined {
       white-space: nowrap;
     }
   }
+  
+  .l-basic-footer__content {
+    border-block-end: 1px solid #aaa;
+    @media(max-width: 600px) {border-block-end-style: none;}
+  }
 }
 
+/* project */
 
-@layer project {
-  .icon-frame {
-    border: 1px solid darkgray;
-    border-radius: 3px;
-    padding: 0.5rem;
-  }
-  
-  .icon {
-    --size: 0.75rem;
-    --line-radius: 1px;
-    color: darkgray;
-  }
 
+
+/* -------------------- */
+/*  imported component  */
+/* -------------------- */
+@layer component {
   .multi-select {
     font-size: calc(1em - 2px);
   }
@@ -159,50 +150,7 @@ button .material-symbols-outlined {
     width: max-content;
     font-weight: 500;
   }
-}
-
-/* footer */
-@layer component {
-  footer h2 {
-    font-weight: 600;
-    font-size: larger;
-    margin-block: 0.25rem;
-  }
-
-  footer ul {
-    padding-inline-start: 2.5ch;
-    margin-block: 0.5rem 0;
-
-    li:not(:first-child) {
-      margin-block-start: 0.25rem;
-    }
-  }
-
-  footer table {
-    border-collapse: collapse;
-    font-size: small;
-    letter-spacing: 0.5px;
-    margin-block-start: 0.5rem;
-    width: 55ch;
-
-    tr {
-      vertical-align: baseline;
-      border-block: 1px solid #aaa;
-    }
-
-    th,td {
-      padding: 0.25rem;
-      font-weight: unset;
-      text-align: left;
-      tbody & {padding-block-start: 0.5rem;}
-      &:first-child {width: 20%}
-      &:nth-child(2){width: 20%}
-    }
-  }
-}
-
-
-@layer component {
+  
   .two-grid {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -275,17 +223,5 @@ button .material-symbols-outlined {
     flex-wrap: wrap;
     gap: 0.5rem;
     height: fit-content;
-  }
-  
-  .footer-content {
-    width: max-content;
-    max-width: calc(100vw - 3rem);
-    padding-block-end: 0.75rem;
-    border-block-end: 1px solid #aaa;
-    display: flex;
-    gap: 1rem 3rem;
-    flex-wrap: wrap;
-    justify-self: center;
-    justify-content: center;
   }
 }
