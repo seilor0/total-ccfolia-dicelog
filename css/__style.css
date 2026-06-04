@@ -142,7 +142,7 @@ button .material-symbols-outlined {
 @layer component {
   .title {
     color: darkslategray;
-    background: linear-gradient(150deg, #e7ecef 40%, #cee8ed 100%);
+    background: var(--pale-green-gradient);
     border-radius: 5rem;
     margin-block: 0;
     margin-inline-start: -0.5rem;
