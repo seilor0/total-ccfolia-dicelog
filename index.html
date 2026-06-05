@@ -75,59 +75,49 @@
             </div>
           </div>
 
-          <div style="display: flex;gap: 0.5rem;align-items: flex-start;width: stretch;">
-            <span v-if="isCoc && setting.show.diceLog" class="title" style="align-self: start;">GROWTH</span>
-            <div v-if="isCoc && setting.show.diceLog" class="two-grid" style="width: stretch;">
-              Critical
-              <label class="toggle-button">
-                <input type="checkbox" value="C" v-model="setting.growTarget">
-                <span class="toggle-button__slider"></span>
+          <span v-if="isCoc && setting.show.diceLog" class="title" style="align-self: start;">GROWTH</span>
+          <div v-show="isCoc && setting.show.diceLog" style="width: stretch;">
+            <div class="growth-div">
+              <label class="button-tag round">
+                <input type="checkbox" value="C" v-model="setting.growTarget" />
+                Critical
               </label>
-  
-              Fumble
-              <label class="toggle-button">
-                <input type="checkbox" value="F" v-model="setting.growTarget">
-                <span class="toggle-button__slider"></span>
+              <label class="button-tag round">
+                <input type="checkbox" value="F" v-model="setting.growTarget" />
+                Fumble
               </label>
-  
-              {{system==='coc6th' ? 'Special' : 'Extreme'}}
-              <label class="toggle-button">
-                <input type="checkbox" value="S" v-model="setting.growTarget">
-                <span class="toggle-button__slider"></span>
+              <label class="button-tag round">
+                <input type="checkbox" value="S" v-model="setting.growTarget" />
+                {{system==='coc6th' ? 'Special' : 'Extreme'}}
               </label>
-  
-              <span>
-                初期値
-                <div class="tips">
-                  <google-icon style="font-size: 20px;">info</google-icon>
-                  <div>
-                    <ul>
-                      <li class="ng">回避</li>
-                      <li class="ng">母国語</li>
-                      <li v-for="key in initSkills[system].keys()">{{key}}</li>
-                    </ul>
+              <label class="button-tag round">
+                <input type="checkbox" value="I" v-model="setting.growTarget" />
+                <span>
+                  初期値
+                  <div class="tips">
+                    <google-icon style="font-size: 20px;">info</google-icon>
+                    <div>
+                      <ul>
+                        <li class="ng">回避</li>
+                        <li class="ng">母国語</li>
+                        <li v-for="key in initSkills[system]?.keys()">{{key}}</li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              </span>
-              <label class="toggle-button">
-                <input type="checkbox" value="I" v-model="setting.growTarget">
-                <span class="toggle-button__slider"></span>
+                </span>
               </label>
-  
-              指定技能
-              <label class="toggle-button">
-                <input type="checkbox" value="E" v-model="setting.growTarget">
-                <span class="toggle-button__slider"></span>
+              <label class="button-tag round">
+                <input type="checkbox" value="E" v-model="setting.growTarget" />
+                指定技能
               </label>
-
-              <multi-select v-show="isCoc && setting.show.diceLog && setting.growTarget.includes('E')"
-                id="multi-select" 
-                :options="skillSet" 
-                :picker-style="{positionArea:'top span-right'}" 
-                @change-selected-options="options => setting.selectedSkills=options"
-                style="--anchor-name: --multi-select;grid-column: 1 / -1;"
-              ></multi-select>
             </div>
+            <multi-select v-show="isCoc && setting.show.diceLog && setting.growTarget.includes('E')"
+              id="multi-select" 
+              :options="skillSet" 
+              :picker-style="{positionArea:'top span-right'}" 
+              @change-selected-options="options => setting.selectedSkills=options"
+              style="--anchor-name: --multi-select;margin-block-start: 0.5rem;width: stretch;"
+            ></multi-select>
           </div>
           
           <button class="link" command="show-modal" commandfor="setting-dialog" style="margin-block-start: 2rem;">集計設定</button>
@@ -275,11 +265,9 @@
               全てのタブ
             </label>
             <div class="tag-wrapper" style="max-width: 25dvw;">
-              <label v-for="[tab, flag] in tabMap" class="button-tag round">
-                <input type="checkbox" :value="tab" 
-                  :checked="flag" @change="tabMap.set(tab, $event.currentTarget.checked)" />
+              <button-tag v-for="[tab, flag] in tabMap" class="round" :is-checked="flag" @checked-toggle="val=>tabMap.set(tab, val)">
                 {{tab}}
-              </label>
+              </button-tag>
             </div>
           </div>
         </div>

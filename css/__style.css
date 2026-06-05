@@ -9,7 +9,7 @@
 }
 
 .material-symbols-outlined {
-  color: rgb(0 0 0 / 0.33);
+  font-variation-settings: 'wght' 300;
 }
 button .material-symbols-outlined {
   color: currentColor;
@@ -151,6 +151,21 @@ button .material-symbols-outlined {
     font-weight: 500;
   }
   
+  .growth-div {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    width: stretch;
+
+    .button-tag {
+      --text-color: var(--sky-blue);
+      --active-back-color: var(--blue-gradient);
+      font-size: calc(1em - 1px);
+      font-weight: 400;
+      min-height: 1.5rem;
+    }
+  }
+
   .two-grid {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -191,7 +206,10 @@ button .material-symbols-outlined {
       padding-inline: 0;
     }
 
-    li {margin-inline-start: 2ch;}
+    li {
+      margin-inline-start: 2ch;
+      text-align: left;
+    }
     li.ng {
       margin-inline-start: 1.25ch;
       padding-inline-start: 0.75ch;
