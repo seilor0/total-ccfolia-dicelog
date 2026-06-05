@@ -2,8 +2,9 @@ import BasicDialog from "./components/basic-dialog.js";
 import ButtonCssIcon from "./components/button-css-icon.js";
 import GoogleIcon from "./components/google-icon.js";
 import MultiSelect from "./components/multi-select.js";
-import ToggleButton from "./components/toggle-button.js";
 import ResultCard from "./components/result-card.js";
+import ToggleButton from "./components/toggle-button.js";
+import ButtonTag from "./components/button-tag.js";
 
 import {ChatData, CocRollData, EmokloreRollData} from './components/class.js'
 import {floatRound} from '../__utility/function.js'
@@ -18,6 +19,7 @@ const rootApp = createApp({
     MultiSelect,
     ToggleButton,
     ResultCard,
+    ButtonTag,
   },
 
   setup () {
