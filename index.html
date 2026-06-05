@@ -10,8 +10,14 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300..700" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300..400,0,0&icon_names=edit,info,upload_file" />
 
-  <link rel="stylesheet" href="../__utility/style.css" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="./css/_base.css" />
+  <link rel="stylesheet" href="./css/basic-dialog.css" />
+  <link rel="stylesheet" href="./css/css-icon.css" />
+  <link rel="stylesheet" href="./css/multi-select.css" />
+  <link rel="stylesheet" href="./css/result-card.css" />
+  <link rel="stylesheet" href="./css/tag-label.css" />
+  <link rel="stylesheet" href="./css/toggle-button.css" />
+  <link rel="stylesheet" href="./css/__style.css" />
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
@@ -19,29 +25,29 @@
 <body>
   <div id="root">
     <main>
-      <aside class="side-menu">
-        <div class="side-menu-content">
+      <aside class="l-side-bar">
+        <div class="l-side-bar__content">
 
           <h1>出目集計ツール</h1>
 
-          <button class="round blue"
+          <button class="round-button invert-el invert"
             @click="$event.currentTarget.nextElementSibling.click()"
             @dragenter="$event.currentTarget.classList.add('target')"
             @dragleave="$event.currentTarget.classList.remove('target')"
             @dragover.prevent
             @drop.prevent="dropHtmlFile($event, true)"
           >
-            <span class="material-symbols-outlined">upload_file</span>
+            <google-icon>upload_file</google-icon>
             ログを追加
           </button>
           <input type="file" accept="text/html" multiple @change="readHtmlFile($event, true)">
 
-          <button class="round" command="show-modal" commandfor="log-modal">
-            <span class="material-symbols-outlined">edit</span>
+          <button class="round-button invert-el" command="show-modal" commandfor="log-dialog">
+            <google-icon>edit</google-icon>
             ログを編集
           </button>
 
-          <button class="round" @click="chatArr.splice(0)">クリア</button>
+          <button class="round-button invert-el" @click="chatArr.splice(0)">クリア</button>
           
           <div style="display: flex;gap: 0.5rem;align-items: center;width: stretch;margin-block-start: 1.5rem;">
             <span class="title">SYSTEM</span>
@@ -56,78 +62,65 @@
             <span class="title">DISPLAY</span>
             <div class="two-grid">
               キャラ選択
-              <toggle-button :top-is-slider="true"
-                :is-checked="setting.show.selectTag" @checked-toggle="val=>setting.show.selectTag=val"
+              <toggle-button :is-checked="setting.show.selectTag" @checked-toggle="val=>setting.show.selectTag=val"
               ></toggle-button>
               
               集計結果
-              <toggle-button :top-is-slider="true"
-                :is-checked="setting.show.total" @checked-toggle="val=>setting.show.total=val"
+              <toggle-button :is-checked="setting.show.total" @checked-toggle="val=>setting.show.total=val"
               ></toggle-button>
               
               {{isCoc ? '成長ログ' : 'ダイスログ'}}
-              <toggle-button :top-is-slider="true"
-                :is-checked="setting.show.diceLog" @checked-toggle="val=>setting.show.diceLog=val"
+              <toggle-button :is-checked="setting.show.diceLog" @checked-toggle="val=>setting.show.diceLog=val"
               ></toggle-button>
             </div>
           </div>
 
-          <div style="display: flex;gap: 0.5rem;align-items: flex-start;width: stretch;">
-            <span v-if="isCoc && setting.show.diceLog" class="title" style="align-self: start;">GROWTH</span>
-            <div v-if="isCoc && setting.show.diceLog" class="two-grid" style="width: stretch;">
-              Critical
-              <label class="toggle-button">
-                <input type="checkbox" value="C" v-model="setting.growTarget">
-                <span class="slider"></span>
+          <span v-if="isCoc && setting.show.diceLog" class="title" style="align-self: start;">GROWTH</span>
+          <div v-show="isCoc && setting.show.diceLog" style="width: stretch;">
+            <div class="growth-div">
+              <label class="button-tag round">
+                <input type="checkbox" value="C" v-model="setting.growTarget" />
+                Critical
               </label>
-  
-              Fumble
-              <label class="toggle-button">
-                <input type="checkbox" value="F" v-model="setting.growTarget">
-                <span class="slider"></span>
+              <label class="button-tag round">
+                <input type="checkbox" value="F" v-model="setting.growTarget" />
+                Fumble
               </label>
-  
-              {{system==='coc6th' ? 'Special' : 'Extreme'}}
-              <label class="toggle-button">
-                <input type="checkbox" value="S" v-model="setting.growTarget">
-                <span class="slider"></span>
+              <label class="button-tag round">
+                <input type="checkbox" value="S" v-model="setting.growTarget" />
+                {{system==='coc6th' ? 'Special' : 'Extreme'}}
               </label>
-  
-              <span>
-                初期値
-                <div class="tips">
-                  <span class="material-symbols-outlined" style="font-size: 20px;">info</span>
-                  <div>
-                    <ul>
-                      <li class="ng">回避</li>
-                      <li class="ng">母国語</li>
-                      <li v-for="key in initSkills[system].keys()">{{key}}</li>
-                    </ul>
+              <label class="button-tag round">
+                <input type="checkbox" value="I" v-model="setting.growTarget" />
+                <span>
+                  初期値
+                  <div class="tips">
+                    <google-icon style="font-size: 20px;">info</google-icon>
+                    <div>
+                      <ul>
+                        <li class="ng">回避</li>
+                        <li class="ng">母国語</li>
+                        <li v-for="key in initSkills[system]?.keys()">{{key}}</li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              </span>
-              <label class="toggle-button">
-                <input type="checkbox" value="I" v-model="setting.growTarget">
-                <span class="slider"></span>
+                </span>
               </label>
-  
-              指定技能
-              <label class="toggle-button">
-                <input type="checkbox" value="E" v-model="setting.growTarget">
-                <span class="slider"></span>
+              <label class="button-tag round">
+                <input type="checkbox" value="E" v-model="setting.growTarget" />
+                指定技能
               </label>
-
-              <multi-select v-show="isCoc && setting.show.diceLog && setting.growTarget.includes('E')"
-                select-id="multi-select" 
-                :options="skillSet" 
-                :picker-style="{positionArea:'top span-right'}" 
-                @change-selected-options="options => setting.selectedSkills=options"
-                style="--anchor-name: --multi-select;grid-column: 1 / -1;"
-              ></multi-select>
             </div>
+            <multi-select v-show="isCoc && setting.show.diceLog && setting.growTarget.includes('E')"
+              id="multi-select" 
+              :options="skillSet" 
+              :picker-style="{positionArea:'top span-right'}" 
+              @change-selected-options="options => setting.selectedSkills=options"
+              style="--anchor-name: --multi-select;margin-block-start: 0.5rem;width: stretch;"
+            ></multi-select>
           </div>
           
-          <button class="link" command="show-modal" commandfor="setting-modal" style="margin-block-start: 2rem;">集計設定</button>
+          <button class="link" command="show-modal" commandfor="setting-dialog" style="margin-block-start: 2rem;">集計設定</button>
         </div>
       </aside>
 
@@ -153,13 +146,15 @@
           ></result-card>
         </div>
         
-        <footer>
-          <div class="footer-content">
+        <footer class="l-basic-footer">
+          <div class="l-basic-footer__content">
             <div>
               <h2>CONTACT</h2>
-              <p style="font-size: larger;">セイル</p>
-              <p>Booth: https://seils.booth.pm/</p>
-              <p>X(旧Twitter): @seilor0</p>
+              <span style="font-size: larger;">セイル</span>
+              <br>
+              Booth: https://seils.booth.pm/
+              <br>
+              X(旧Twitter): @seilor0
             </div>
             <div>
               <h2>CAUTION</h2>
@@ -210,15 +205,12 @@
       </div>
     </main>
 
-    <dialog class="modal" id="log-modal" closedby="any">
-      <header>
-        <div style="display: flex;gap: 8px;">
-          <h2>ログを編集</h2>
-          <button @click="deleteLog" style="user-select: none;">delete</button>
-        </div>
-        <button-css-icon icon-name="icon-close" command="close" commandfor="log-modal"></button-css-icon>
-      </header>
-      <section class="modal-body">
+    <basic-dialog id="log-dialog">
+      <template #header>
+        ログを編集
+        <button @click="deleteLog" class="invert-el invert" style="user-select: none;">delete</button>
+      </template>
+      <template #content>
         <div class="log-wrap" tabindex="-1" @keyup.delete="deleteLog">
           <div v-for="(chat, index) in chatArr" :data-index="index">
             <span>{{chat.tab}}</span>
@@ -226,21 +218,19 @@
             <p>{{chat.log}}</p>
           </div>
         </div>
-      </section>
-    </dialog>
-    
-    <dialog class="modal" id="setting-modal" closedby="any">
-      <header>
-        <h2>SETTING</h2>
-        <button-css-icon icon-name="icon-close" command="close" commandfor="setting-modal"></button-css-icon>
-      </header>
-      <section class="modal-body">
+      </template>
+    </basic-dialog>
+
+    <basic-dialog id="setting-dialog">
+      <template #header>SETTING</template>
+      <template #content>
         <div class="two-grid" style="align-items: start;">
           複製コマ
-          <toggle-button :top-is-slider="true"
-            :is-checked="setting.mergeDupUnit" @checked-toggle="val=>setting.mergeDupUnit=val"
-            text-checked="まとめる" text-not-checked="分ける"
-          ></toggle-button>
+          <toggle-button :top-is-slider="true" :is-checked="setting.mergeDupUnit" @checked-toggle="val=>setting.mergeDupUnit=val"
+          >
+            <template #checked>まとめる</template>
+            <template #not-checked>分ける</template>
+          </toggle-button>
 
           <template v-if="isCoc">
             ダイス
@@ -274,20 +264,17 @@
               <input type="checkbox" @change="tabMap.keys().forEach(key=>tabMap.set(key, $event.currentTarget.checked))" checked/>
               全てのタブ
             </label>
-            <div class="select-tag-wrapper" style="max-width: 25dvw;">
-              <label v-for="[tab, flag] in tabMap" class="select-tag">
-                <input type="checkbox" :value="tab" 
-                  :checked="flag" @change="tabMap.set(tab, $event.currentTarget.checked)" />
+            <div class="tag-wrapper" style="max-width: 25dvw;">
+              <button-tag v-for="[tab, flag] in tabMap" class="round" :is-checked="flag" @checked-toggle="val=>tabMap.set(tab, val)">
                 {{tab}}
-              </label>
+              </button-tag>
             </div>
           </div>
         </div>
-
-      </section>
-    </dialog>
+      </template>
+    </basic-dialog>
   </div>
-  <script type="module" src="code_vue.js"></script>
+  <script type="module" src="code-vue.js"></script>
 </body>
 
 </html>

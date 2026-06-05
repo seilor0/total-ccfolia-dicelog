@@ -1,0 +1,76 @@
+@layer component {
+  .multi-select {
+    height: 1.5em;
+    --transition-time: 0.2s;
+    --anchor-name: --multiselect;
+  
+    position: relative;
+    white-space: nowrap;
+    
+    /* セレクト部分 */
+    > :first-child {
+      anchor-name: var(--anchor-name);
+  
+      background-color: #fff;
+      border: 1px solid #aaa;
+      border-radius: 0.25em;
+      font-family: unset;
+      font-size: unset;
+  
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.25em;
+      
+      padding: 0 0.5em;
+      height: 100%;
+      width: stretch;
+      cursor: pointer;
+      
+      > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      > .arrow {
+        flex-shrink: 0;
+        background-color: #999;
+        width: 1ch;
+        aspect-ratio: 3/2;
+        clip-path: polygon(0 100%, 50% 0, 100% 100%);
+        transition: rotate var(--transition-time);
+      }
+    }
+    &:has(.multi-select__picker:not(:popover-open)) .arrow {rotate: 180deg;}
+  }
+  
+  /* ドロップダウンメニュー */
+  .multi-select__picker {
+    background: canvas;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
+    
+    margin: 0;
+    padding: 0.25em 0.5em;
+    line-height: 1.5em;
+    max-height: 50vh;
+    min-width: anchor-size(width);
+    box-sizing: border-box;
+    
+    overflow: hidden auto;
+    scrollbar-color: #ccc transparent;
+    scrollbar-width: thin;
+    
+    position: absolute;
+    position-anchor: var(--anchor-name);
+    position-area: bottom span-right;
+    position-try-fallbacks: flip-block;
+    
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.2em;
+    }
+    input[type=checkbox] {margin: 0;}
+  }
+}

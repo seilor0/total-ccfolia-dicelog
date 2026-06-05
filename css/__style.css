@@ -1,0 +1,245 @@
+/* ------------------------------ */
+/* サイトごとの個別CSSを記述する場所 */
+/* __utility フォルダでは使わない   */
+/* ------------------------------ */
+
+:root {
+  --basic-font : 'Quicksand','Zen Kaku Gothic New';
+  scrollbar-gutter: stable;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'wght' 300;
+}
+button .material-symbols-outlined {
+  color: currentColor;
+  font-variation-settings: 'wght' 300;
+}
+
+
+
+/* ---------------------- */
+/*     || base, reset     */
+/* ---------------------- */
+@layer base {
+  h1 {
+    text-align: center;
+    user-select: none;
+    font-weight: 100;
+  }
+  
+  h2 {
+    margin-block: 1rem 0.25rem;
+    font-size: larger;
+    font-weight: 500;
+  }
+
+  button {
+    border-radius: 4px;
+    padding: 0.5rem;
+    border: 1px solid currentColor;
+  }
+  
+  textarea {field-sizing: content;}
+  
+  label {align-items: center;}
+  
+  input[type="checkbox"] {margin: 3px 3px 2px 4px;}
+  input[type="file"] {display: none;}
+
+  select {
+    color: #444;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 0.25rem;
+    height: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+}
+
+
+
+/* -------------------- */
+/*       || layer       */
+/* -------------------- */
+/* imported */
+@layer layout {
+  .l-side-bar {
+    user-select: none;
+  }
+  .l-side-bar__content {
+    padding: 1.5rem 2.5rem;
+    gap: 1rem;
+    width: 16rem;
+
+    .round-button {
+      width: 75%;
+      white-space: nowrap;
+    }
+  }
+  
+  .l-basic-footer__content {
+    border-block-end: 1px solid #aaa;
+    @media(max-width: 600px) {border-block-end-style: none;}
+  }
+}
+
+/* project */
+
+
+
+/* -------------------- */
+/*  imported component  */
+/* -------------------- */
+@layer component {
+  .multi-select {
+    font-size: calc(1em - 2px);
+  }
+  
+  .invert-el {
+    --line-color: var(--light-blue);
+    --active-back-color: var(--blue-gradient);
+  }
+
+  .button-tag {
+    --text-color: gray;
+    font-size: 0.8em;
+    .basic-dialog & {--text-color: hsl(from lightcoral h s calc(l - 7));}
+    .result-card &  {--text-color: hsl(from lightblue h s calc(l - 20));}
+  }
+  
+  .toggle-button {
+    --radius: calc(0.5rem - 1px);
+    --padding: 2px;
+    font-weight: 500;
+    .checked {color: var(--accent);}
+    .not-checked {color: rgb(0 0 0 / 0.4);}
+  }
+
+  .link {
+    font-size: calc(1em - 1px);
+  }
+
+  .basic-dialog {
+    --radius: 4px;
+    header {
+      padding: 1rem;
+      padding-inline-start: 1.5rem;
+    }
+    section {
+      padding: 1rem 1.5rem;
+      p {margin: 0;}
+    }
+  }
+}
+
+
+/* -------------------- */
+/*  project component   */
+/* -------------------- */
+@layer component {
+  .title {
+    color: darkslategray;
+    background: var(--pale-green-gradient);
+    border-radius: 5rem;
+    margin-block: 0;
+    margin-inline-start: -0.5rem;
+    padding: 4px 0.75rem;
+    width: max-content;
+    font-weight: 500;
+  }
+  
+  .growth-div {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    width: stretch;
+
+    .button-tag {
+      --text-color: var(--sky-blue);
+      --active-back-color: var(--blue-gradient);
+      font-size: calc(1em - 1px);
+      font-weight: 400;
+      min-height: 1.5rem;
+    }
+  }
+
+  .two-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .tips {
+    display: inline;
+    position: relative;
+    font-weight: normal;
+    vertical-align: middle;
+
+    > div:last-child {
+      color: darkslategray;
+      background-color: #fdfdfd;
+      box-shadow: 0 3px 12px rgb(0 0 0 / 0.3);
+      padding: 1rem 1.5rem;
+      width: max-content;
+      height: 62dvh;
+      border-radius: 1rem;
+      font-size: smaller;
+      position: absolute;
+      z-index: 10;
+      bottom: -5rem;
+      left: 3ch;
+  
+      &:not(:hover + &) {display: none;}
+    }
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      max-height: stretch;
+      gap: 0.25rem 2rem;
+      margin: 0;
+      padding-inline: 0;
+    }
+
+    li {
+      margin-inline-start: 2ch;
+      text-align: left;
+    }
+    li.ng {
+      margin-inline-start: 1.25ch;
+      padding-inline-start: 0.75ch;
+      &::marker {
+        content: '✕';
+        color: #ff4c4c;
+        font-weight: 900;
+      }
+    }
+  }
+
+  .log-wrap {
+    display: grid;
+    grid-template-columns: minmax(auto,10ch) minmax(auto,20ch) 1fr;
+    gap: 0.5rem 1rem;
+    font-size: small;
+    
+    > div {display: contents;}
+  
+    span:first-child{
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .tag-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    height: fit-content;
+  }
+}

@@ -3,7 +3,7 @@ const {ref} = Vue;
 export default {
   name: 'MultiSelect',
   props: {
-    selectId: String,
+    id: {type: String, required: true},
     options: Set,
     pickerStyle: Object,
   },
@@ -15,13 +15,13 @@ export default {
     }
   },
   template: `
-  <div class="multi-select" :style="{'--anchor-name': '--' + selectId}">
-    <button :popovertarget="selectId">
+  <div class="multi-select" :style="{'--anchor-name': '--' + id}">
+    <button :popovertarget="id">
       <span>{{selectedOptions.sort().join(', ')}}</span>
       <div class="arrow"></div>
     </button>
-    <div :id="selectId" class="multi-picker" :style="pickerStyle" popover="hint">
-      <label v-for="(option,index) in options" :key="selectId+'-'+index">
+    <div :id="id" class="multi-select__picker" :style="pickerStyle" popover="hint">
+      <label v-for="(option,index) in options" :key="id+'-'+index">
         <input type="checkbox" :value="option" v-model="selectedOptions" @change="$emit('change-selected-options', selectedOptions)">
         {{option}}
       </label>
