@@ -39,6 +39,7 @@ const rootApp = createApp({
     const initSkills = ref({
       coc6th: new Map(),
       coc7th: new Map(),
+      emoklore: new Map(),
     });
 
     /** ChatData [] */
@@ -238,7 +239,7 @@ const rootApp = createApp({
           .filter(rollData => value.characters.has(rollData[setting.value.mergeDupUnit ? 'nameNodup' : 'name']));
         resultMap.set(key, {show:value.show, ...computeResultData(targetRoll)});
       });
-      console.log('result data map', resultMap);
+      // console.log('result data map', resultMap);
       return resultMap;
     });
 
