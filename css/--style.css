@@ -5,7 +5,6 @@
 
 :root {
   --basic-font : 'Quicksand','Zen Kaku Gothic New';
-  scrollbar-gutter: stable;
 }
 
 .material-symbols-outlined {
