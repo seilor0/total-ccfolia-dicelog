@@ -7,7 +7,7 @@ import ToggleButton from "./components/toggle-button.js";
 import ButtonTag from "./components/button-tag.js";
 
 import {ChatData, CocRollData, EmokloreRollData} from './components/class.js'
-import {floatRound} from '../__utility/function.js'
+import {floatRound} from './lib/calculation.js'
 
 const {createApp, ref, computed, watch, onMounted, toRaw} = Vue;
 
